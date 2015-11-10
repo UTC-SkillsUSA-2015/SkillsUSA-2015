@@ -17,12 +17,14 @@ public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformE
 
     [SerializeField]
     float m_JumpForce = 100;
+    [SerializeField]
+    LayerMask m_GroundLayer;
 
     Rigidbody2D m_RigidBody;
     bool kGrounded;
 
     // Use this for initialization
-    void Start () {
+    protected virtual void Start () {
         m_RigidBody = GetComponent<Rigidbody2D> ();
     }
 
