@@ -4,19 +4,28 @@ using System;
 using UnityEngine.Events;
 
 // Inherits a required Rigidbody from Abstract2DPlatformEngine
-[RequireComponent (typeof (BoxCollider2D))]
 public class RaycastMovementEngine : Abstract2DPlatformEngine {
     Vector2 movement;
+    [SerializeField]
+    Vector2 leftCorner = new Vector2 ();
+    [SerializeField]
+    Vector2 rightCorner = new Vector2 ();
 
     protected override void Start () {
         base.Start ();
     }
 
     public override void SetMovement (Vector2 input) {
-        throw new NotImplementedException ();
+        
     }
 
     protected virtual void FixedUpdate () {
-        //var frame_onGround = Physics.Raycast()
+        Ray grounderRayL = new Ray (leftCorner, Vector3.down);
+        Ray grounderRayR = new Ray (rightCorner, Vector3.down);
+    }
+
+    public override void Jump() {
+        m_Rigidbody.constraints = m_Rigidbody.constraints ^ RigidbodyConstraints2D.FreezePositionY;
+        base.Jump ();
     }
 }

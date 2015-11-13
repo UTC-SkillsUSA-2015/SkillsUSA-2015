@@ -19,16 +19,20 @@ public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformE
     float m_JumpForce = 100;
     [SerializeField]
     LayerMask m_GroundLayer;
-
-    Rigidbody2D m_RigidBody;
+    protected Rigidbody2D m_Rigidbody {
+        get {
+            return kRigidBody;
+        }
+    }
+    Rigidbody2D kRigidBody;
     bool kGrounded;
 
     // Use this for initialization
     protected virtual void Start () {
-        m_RigidBody = GetComponent<Rigidbody2D> ();
+        kRigidBody = GetComponent<Rigidbody2D> ();
     }
 
-    public void Jump () {
-        m_RigidBody.AddForce (new Vector2 (0, m_JumpForce), ForceMode2D.Impulse);
+    public virtual void Jump () {
+        kRigidBody.AddForce (new Vector2 (0, m_JumpForce), ForceMode2D.Impulse);
     }
 }
