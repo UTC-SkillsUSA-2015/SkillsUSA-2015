@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8e909ebbaae81c9428bebf0447f85ed4
-timeCreated: 1449510493
+timeCreated: 1449597054
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -23,6 +23,8 @@ TextureImporter:
     21300032: Test UI_16
     21300034: Test UI_17
     21300036: Test UI_18
+    21300038: Test UI_19
+    21300040: Test UI_20
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -256,6 +258,26 @@ TextureImporter:
         y: 407
         width: 166
         height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Test UI_19
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 105
+        width: 656
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Test UI_20
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 44
+        width: 668
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

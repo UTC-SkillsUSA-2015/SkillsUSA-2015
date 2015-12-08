@@ -33,8 +33,6 @@ public class HealthBar : MonoBehaviour {
 
     float Percent { get { return (float)CurrentHealth / MaxHealth; } }
 
-    //float slowPercent { get { return (float)CurrentHealthSlow / MaxHealth; } }
-
     void Start()
     {
         healthBarFill.color = beggining;

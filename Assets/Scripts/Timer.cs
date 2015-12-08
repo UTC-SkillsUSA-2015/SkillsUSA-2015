@@ -53,19 +53,32 @@ public class Timer : MonoBehaviour
                 {
                     fminutes = 0;
                     fseconds = 0;
-                    _hudTime.text = fminutes.ToString("f0") + ":0" + fseconds.ToString("f0");
+                    _hudTime.text = ("0");
                 }
             }
+            //else
+            //{
+            //    fseconds -= Time.deltaTime;
+            //    if (iSeconds > 10)
+            //    {
+            //        _hudTime.text = iMinutes + ":" + iSeconds;
+            //    }
+            //    else if (iSeconds < 10)
+            //    {
+            //        _hudTime.text = iMinutes + ":0" + iSeconds;
+            //    }
+            //}
+
             else
             {
                 fseconds -= Time.deltaTime;
                 if (iSeconds > 10)
                 {
-                    _hudTime.text = iMinutes + ":" + iSeconds;
+                    _hudTime.text = iSeconds.ToString();
                 }
                 else if (iSeconds < 10)
                 {
-                    _hudTime.text = iMinutes + ":0" + iSeconds;
+                    _hudTime.text = iSeconds.ToString();
                 }
             }
 

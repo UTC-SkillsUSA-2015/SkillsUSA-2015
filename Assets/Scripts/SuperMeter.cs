@@ -14,7 +14,7 @@ public class SuperMeter : MonoBehaviour {
     float fillAmount;
 
     [SerializeField]
-    byte powerLevel;
+    byte kPowerLevel;
 
     [SerializeField]
     Color[] levelColors;
@@ -22,13 +22,35 @@ public class SuperMeter : MonoBehaviour {
     [SerializeField]
     float fillSpeed = 1;
 
+    [SerializeField]
+    Text counterText;
+
+    [SerializeField]
+    byte startingPowerLevel;
+
     public int Levels { get { return levelColors.Length - 1; } }
+
+    public byte PowerLevel
+    {
+        get
+        {
+            return kPowerLevel;
+        }
+
+        set
+        {
+            kPowerLevel = value;
+            counterText.text = PowerLevel.ToString();
+            ChangeColors();
+        }
+    }
 
     void Start()
     {
         Debug.Log(fillAmount);
         ChangeColors();
         superFill.fillAmount = 0;
+        PowerLevel = startingPowerLevel;
     }
 
     void Update ()
@@ -62,7 +84,7 @@ public class SuperMeter : MonoBehaviour {
             if (!UsePower(5)) Debug.Log("IT'S NO USE!");
         }
         
-        if(powerLevel == Levels)
+        if(PowerLevel == Levels)
         {
             fillAmount = 0;
         }
@@ -70,9 +92,9 @@ public class SuperMeter : MonoBehaviour {
         if (fillAmount >= 1)
         {
             fillAmount--;
-            powerLevel = (byte)Mathf.Clamp(powerLevel + 1, 0, Levels);
+            PowerLevel = (byte)Mathf.Clamp(PowerLevel + 1, 0, Levels);
             superFill.fillAmount = fillAmount;
-            ChangeColors();
+            //ChangeColors();
         }
 
         superFill.fillAmount += (fillAmount - superFill.fillAmount) / fillSpeed;
@@ -80,18 +102,19 @@ public class SuperMeter : MonoBehaviour {
 
     void ChangeColors()
     {
-        superBack.color = levelColors[powerLevel];
-        superFill.color = levelColors[powerLevel + 1];
+        superBack.color = levelColors[PowerLevel];
+        superFill.color = levelColors[PowerLevel + 1];
+   
     }
 
     bool UsePower(byte amount)
     {
-        if (amount > powerLevel) return false;
+        if (amount > PowerLevel) return false;
             
         else
         {
-            powerLevel -= amount;
-            ChangeColors();
+            PowerLevel -= amount;
+            //ChangeColors();
             return true;
         }
     }
