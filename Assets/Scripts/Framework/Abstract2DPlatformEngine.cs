@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent (typeof (Rigidbody2D))]
 public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformEngine2D {
-    public abstract void SetMovement (Vector2 input);
-
     public bool Grounded {
         get {
             return kGrounded;
@@ -24,6 +23,17 @@ public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformE
             return kRigidBody;
         }
     }
+
+    public abstract float WalkMotion {
+        set;
+    }
+
+    public virtual Vector2 Motion {
+        set {
+            WalkMotion = value.x;
+        }
+    }
+
     Rigidbody2D kRigidBody;
     bool kGrounded;
 
