@@ -4,20 +4,32 @@ using System;
 
 [RequireComponent (typeof (Rigidbody2D))]
 public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformEngine2D {
+#if UNITY_EDITOR
+    [SerializeField]
+    bool DebugMode;
+#endif
     public bool Grounded {
         get {
             return kGrounded;
         }
         protected set {
-            SendMessage ("GroundStateChanged", value, SendMessageOptions.DontRequireReceiver);
-            kGrounded = value;
+#if UNITY_EDITOR
+            if (DebugMode) {
+                Debug.Log ("Attempted to set ground state to " + value);
+            }
+#endif
+            if (value != kGrounded) {
+                SendMessage ("GroundStateChanged", value, SendMessageOptions.DontRequireReceiver);
+                kGrounded = value;
+            }
+#if UNITY_EDITOR
+            if (DebugMode) {
+                Debug.Log ("Grounded is " + kGrounded);
+            }
+#endif
         }
     }
 
-    [SerializeField]
-    float m_JumpForce = 100;
-    [SerializeField]
-    LayerMask m_GroundLayer;
     protected Rigidbody2D m_Rigidbody {
         get {
             return kRigidBody;
@@ -42,7 +54,7 @@ public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformE
         kRigidBody = GetComponent<Rigidbody2D> ();
     }
 
-    public virtual void Jump () {
-        kRigidBody.AddForce (new Vector2 (0, m_JumpForce), ForceMode2D.Impulse);
+    public virtual void Jump (float force) {
+        kRigidBody.AddForce (new Vector2 (0, force), ForceMode2D.Impulse);
     }
 }

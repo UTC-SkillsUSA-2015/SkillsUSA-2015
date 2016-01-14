@@ -5,7 +5,7 @@ public interface ISimplePlatformEngine2D : IControlEngine2D {
     /// <summary>
     /// Make the engine jump.
     /// </summary>
-    void Jump ();
+    void Jump (float force);
     /// <summary>
     /// Details whether the engine's GameObject is currently on the ground.
     /// </summary>

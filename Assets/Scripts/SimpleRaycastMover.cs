@@ -19,6 +19,12 @@ public class SimpleRaycastMover : Abstract2DPlatformEngine {
     [SerializeField]
     [Range (0, 1)]
     float airAcceleration = 0.25f;
+    [SerializeField]
+    float RaycastDist = 0.01f;
+    [SerializeField]
+    LayerMask ground;
+    [SerializeField]
+    BoxCollider2D mainHitbox;
 
     public override float WalkMotion {
         set {
@@ -31,5 +37,6 @@ public class SimpleRaycastMover : Abstract2DPlatformEngine {
         var velocity = m_Rigidbody.velocity;
         velocity.x = movement * speedMultiplier;
         m_Rigidbody.velocity = velocity;
+        Grounded = Physics2D.Raycast ((Vector2) transform.position + mainHitbox.offset + Vector2.down * (mainHitbox.size.y / 2),Vector2.down, RaycastDist, ground);
     }
 }
