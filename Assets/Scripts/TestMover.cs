@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(SimpleRaycastMover))]
 public class TestMover : MonoBehaviour {
     [SerializeField]
-    float JumpForce = 100;
+    float JumpSpeed = 10;
 
     SimpleRaycastMover m_mover;
     // Use this for initialization
@@ -16,9 +16,10 @@ public class TestMover : MonoBehaviour {
     void FixedUpdate () {
         float h = Input.GetAxisRaw ("Horizontal");
         m_mover.WalkMotion = h;
+        Debug.Log ("Vertical axis: " + Input.GetAxisRaw ("Vertical"));
         if (Input.GetAxisRaw("Vertical") > 0 && m_mover.Grounded) {
             Debug.Log ("Jumping");
-            m_mover.Jump (JumpForce);
+            m_mover.Jump (JumpSpeed);
         }
     }
 }

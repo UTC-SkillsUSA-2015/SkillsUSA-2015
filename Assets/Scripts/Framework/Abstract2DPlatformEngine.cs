@@ -6,7 +6,7 @@ using System;
 public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformEngine2D {
 #if UNITY_EDITOR
     [SerializeField]
-    bool DebugMode;
+    protected bool DebugMode;
 #endif
     public bool Grounded {
         get {
@@ -55,6 +55,7 @@ public abstract class Abstract2DPlatformEngine : MonoBehaviour, ISimplePlatformE
     }
 
     public virtual void Jump (float force) {
-        kRigidBody.AddForce (new Vector2 (0, force), ForceMode2D.Impulse);
+        kRigidBody.velocity = new Vector2 (kRigidBody.velocity.x, force);
+        Grounded = false;
     }
 }
