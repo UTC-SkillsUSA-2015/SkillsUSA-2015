@@ -5,6 +5,7 @@
 /// to make the game object run.
 /// </summary>
 [RequireComponent (typeof (Animator))]
-[RequireComponent (typeof (ISimplePlatformEngine2D))]
 public class Fighter : MonoBehaviour {
+    [SerializeField]
+    Abstract2DPlatformEngine m_engine;
 }
