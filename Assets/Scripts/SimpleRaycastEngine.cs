@@ -6,7 +6,7 @@ using System;
 public class SimpleRaycastEngine : Abstract2DPlatformEngine {
     float movement = 0;
     [SerializeField]
-    float speedMultiplier = 1;
+    float speedMultiplier = 5;
     /// <summary>
     /// Acceleration used while on the ground.
     /// </summary>
@@ -18,7 +18,7 @@ public class SimpleRaycastEngine : Abstract2DPlatformEngine {
     [SerializeField]
     float airAcceleration = 0.25f;
     [SerializeField]
-    float RaycastDist = 0.01f;
+    float RaycastDist = 0.05f;
     [SerializeField]
     LayerMask ground;
     [SerializeField]
