@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class SimpleRaycastMover : Abstract2DPlatformEngine {
+public class SimpleRaycastEngine : Abstract2DPlatformEngine {
     float movement = 0;
     [SerializeField]
     float speedMultiplier = 1;

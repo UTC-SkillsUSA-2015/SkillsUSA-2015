@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(SimpleRaycastMover))]
+[RequireComponent(typeof(SimpleRaycastEngine))]
 public class TestMover : MonoBehaviour {
     [SerializeField]
     float JumpSpeed = 10;
 
-    SimpleRaycastMover m_mover;
+    SimpleRaycastEngine m_mover;
     // Use this for initialization
     void Start () {
-        m_mover = GetComponent<SimpleRaycastMover> ();
+        m_mover = GetComponent<SimpleRaycastEngine> ();
     }
 
     // Update is called once per frame
