@@ -10,29 +10,35 @@ public class juiciness : MonoBehaviour {
     [SerializeField]
     float moveObject;
 
+    [SerializeField]
+    GameObject self;
+
     Vector3 resetScale;
+
+    [SerializeField]
     Vector3 resetPosition;
 
     void Start()
     {
         resetScale = new Vector3(1.324974f, 0.9249583f, 2);
+        resetPosition = self.transform.position;
+        resetChange();
     }
 
-    //void OnEnable ()
+    //void OnEnable()
     //{
-    //    transform.localScale = resetScale;
-    //    transform.position -= new Vector3(moveObject, 0, 0);
+    //    resetChange();
     //}
 
     public void mouseOverChange()
     {
-         transform.localScale += new Vector3(scaleObject, scaleObject, 0f);
+        transform.localScale += new Vector3(scaleObject, scaleObject, 0f);
         transform.position += new Vector3(moveObject, 0, 0);
     }
 
     public void resetChange()
     {
         transform.localScale = resetScale;
-        transform.position -= new Vector3 (moveObject,0,0);
+        transform.position = resetPosition;
     }
 }
