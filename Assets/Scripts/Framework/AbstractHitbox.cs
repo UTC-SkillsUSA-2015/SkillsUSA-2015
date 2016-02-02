@@ -26,15 +26,10 @@ public abstract class AbstractHitbox : MonoBehaviour {
     /// <param name="launchForce">The direction and magnitude of the launch.</param>
     public abstract void Launch (Vector2 launchForce);
     /// <summary>
-    /// Damages the opponent. Blocking or evading may nullify this.
-    /// </summary>
-    /// <param name="dmg">Damage to take.</param>
-    public abstract void Damage (float dmg);
-    /// <summary>
     /// Damages the opponent, but still does a small percent of damage if
     /// blocked.
     /// </summary>
     /// <param name="dmg">The amount of damage to deal.</param>
     /// <param name="chipPercent">The percent of damage dealt if blocked.</param>
-    public abstract void Damage (float dmg, float chipPercent);
+    public abstract void Damage (float dmg, float chipPercent = 0);
 }
