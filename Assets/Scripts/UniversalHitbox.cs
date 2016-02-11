@@ -53,8 +53,12 @@ public class UniversalHitbox : AbstractHitbox {
 
     public void Update () {
         if (m_attack) {
-
+            var atk = new Attack { data = m_attack, team = 0, id = GenerateID(m_attack) };
         }
+    }
+
+    private int GenerateID (AttackData data) {
+        return data.priority;
     }
 
     /// <summary>
@@ -109,7 +113,7 @@ public class UniversalHitbox : AbstractHitbox {
     /// This is called BY the affecting, ON the affected.
     /// </summary>
     /// <param name="attack">The attack this hitbox is being hit with.</param>
-    public override void Hit (AttackData attack) {
+    public override void Hit (Attack attack) {
         throw new NotImplementedException ();
     }
 }

@@ -13,5 +13,5 @@ public abstract class AbstractHitbox : MonoBehaviour {
     /// Called when an attack lands.
     /// </summary>
     /// <param name="attack">Data of the attack.</param>
-    public abstract void Hit (AttackData attack);
+    public abstract void Hit (Attack attack);
 }
