@@ -73,7 +73,8 @@ public class AttackData : ScriptableObject {
 
     public override int GetHashCode () {
         int istof;
-        istof = (m_dmg + (347 << Mathf.Abs (m_priority)));
+        istof = (m_dmg + (347 << Mathf.Abs (m_priority))) * 54;
+        istof += this.name.GetHashCode () >> 2;
         istof *= (m_priority * 67 + (int) (m_chip * 97570));
         istof += (int) (m_launch.magnitude * (100 * m_chip) * (m_launchState ? 1 : -1));
         istof *= 789 << (int) (m_chip * 10);
