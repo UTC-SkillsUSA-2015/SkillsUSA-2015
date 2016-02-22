@@ -30,11 +30,14 @@ public class FighterHitbox : AbstractHitbox {
     [SerializeField]
     Rigidbody2D m_rigidbody;
     [SerializeField]
-    Fighter m_main;
+    FighterHealth m_health;
+    [SerializeField]
+    Fighter m_parent;
 
     AttackData m_attack;
     List<AbstractHitbox> m_intersecting = new List<AbstractHitbox> ();
     int m_frameTimer = 0;
+    float blockingLaunchScale = 0.5f;
 
     // Use this for initialization
     void Start () {
@@ -54,13 +57,23 @@ public class FighterHitbox : AbstractHitbox {
     }
 
     public void Update () {
-        if (m_attack) {
-            var atk = new Attack(data: m_attack, team: 0, id: GenerateID(m_attack));
+        if (m_attack && m_intersecting.Count > 0) {
+            var atk = new Attack(data: m_attack, team: m_parent.Team, id: GenerateID(m_attack));
+            foreach (var c in m_intersecting) {
+                c.Hit (atk);
+            }
         }
     }
 
     private int GenerateID (AttackData data) {
-        return data.Priority;
+        var id = data.GetHashCode () * 23;
+        id <<= data.Priority;
+        id += 29 * m_parent.Team;
+        id *= (int) m_health.CurrentHealth;
+        id <<= 5;
+        id *= Time.frameCount;
+        return id;
+        // return (((data.GetHashCode() * 23) << data.Priority) + 29 * parent.Team) * (int) m_health.CurrentHealth;
     }
 
     /// <summary>
@@ -97,7 +110,7 @@ public class FighterHitbox : AbstractHitbox {
     /// <param name="collision">The collider that entered</param>
     public override void OnTriggerEnter2D (Collider2D collision) {
         var otherHitbox = collision.GetComponent<AbstractHitbox> ();
-        if (otherHitbox && otherHitbox.transform.root != transform.root) {
+        if (otherHitbox /* ... is not null */ && otherHitbox.transform.root != transform.root) {
             m_intersecting.Add (otherHitbox);
         }
     }
@@ -117,7 +130,9 @@ public class FighterHitbox : AbstractHitbox {
     /// <param name="attack">The attack this hitbox is being hit with.</param>
     public override void Hit (Attack attack) {
         if (m_state == HitboxState.Block) {
-            attack.kDamageMultiplier *= attack.kData.Chip;
+            attack.damageMultiplier *= attack.kData.Chip;
+            attack.launchScale.x = blockingLaunchScale;
+            attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
         }
     }
 }

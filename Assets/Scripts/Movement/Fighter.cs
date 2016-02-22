@@ -10,6 +10,20 @@ public class Fighter : MonoBehaviour {
     [SerializeField]
     Animator m_anim;
 
+    [SerializeField]
+    private int m_team;
+
+    public int Team {
+        get {
+            return m_team;
+        }
+    }
+    public bool Grounded {
+        get {
+            return m_engine.Grounded;
+        }
+    }
+
     #region Error messages
     string NoMovementEngineError {
         get {

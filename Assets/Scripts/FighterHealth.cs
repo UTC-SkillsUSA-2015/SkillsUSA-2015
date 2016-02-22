@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class FighterHealth : MonoBehaviour {
+    public uint CurrentHealth { get; private set; }
 
     // Use this for initialization
     void Start () {

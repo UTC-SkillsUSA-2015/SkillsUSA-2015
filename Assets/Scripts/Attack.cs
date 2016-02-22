@@ -19,19 +19,31 @@ public class Attack {
     /// The damage multiplier applied to the attack. Affected when blocked,
     /// or when using higher-powered characters.
     /// </summary>
-    public float kDamageMultiplier;
+    public float damageMultiplier;
+    /// <summary>
+    /// Affects the launch vector with Vector2.Scale
+    /// </summary>
+    public Vector2 launchScale;
 
-    public Attack(AttackData data, int team, int id, float damageMult = 1.00f) {
+    public int TotalDamage {
+        get {
+            return (int) (kData.Dmg * damageMultiplier);
+        }
+    }
+
+    public Attack (AttackData data, int team, int id, float damageMult = 1.00f,
+        float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {
         kData = data;
         kTeam = team;
         kId = id;
-        kDamageMultiplier = damageMult;
+        damageMultiplier = damageMult;
+        launchScale = new Vector2 (xKnockbackMult, yKnockbackMult);
     }
 
-    public static bool operator ==(Attack left, Attack right) {
+    public static bool operator == (Attack left, Attack right) {
         return left.kData == right.kData && left.kTeam == right.kTeam && left.kId == right.kId;
     }
-    public static bool operator !=(Attack left, Attack right) {
+    public static bool operator != (Attack left, Attack right) {
         return left.kData != right.kData || left.kTeam != right.kTeam || left.kId != right.kId;
     }
     public override bool Equals (object obj) {
@@ -42,5 +54,11 @@ public class Attack {
         else {
             return false;
         }
+    }
+    public override int GetHashCode () {
+        var hash = (kData.GetHashCode () + kId);
+        hash *= (int) (10 * damageMultiplier);
+        hash <<= Mathf.Abs (kTeam);
+        return hash;
     }
 }
