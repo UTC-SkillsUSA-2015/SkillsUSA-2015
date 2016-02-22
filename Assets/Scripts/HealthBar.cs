@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour {
+public class HealthBar : MonoBehaviour, IHealthBar {
 
     [SerializeField]
     Color beggining;
@@ -22,8 +22,8 @@ public class HealthBar : MonoBehaviour {
     [SerializeField]
     uint CurrentHealth;
 
-    [SerializeField]
-    uint damageAmount;
+//    [SerializeField]
+//    uint damageAmount;
 
     [SerializeField]
     float slowSpeed;
@@ -31,7 +31,9 @@ public class HealthBar : MonoBehaviour {
     [SerializeField]
     float freezeTimer;
 
-    float Percent { get { return (float)CurrentHealth / MaxHealth; } }
+	float healthTest = 1;
+
+    float fillPercent { get { return (float)CurrentHealth / MaxHealth; } }
 
     void Start()
     {
@@ -52,8 +54,8 @@ public class HealthBar : MonoBehaviour {
             CurrentHealth = MaxHealth;
         }
 
-        healthBarFill.color = Color.Lerp(end, beggining, Percent);
-        healthBarFill.fillAmount = Percent;
+		healthBarFill.color = Color.Lerp(end, beggining, fillPercent);
+		healthBarFill.fillAmount = fillPercent;
 
         if (freezeTimer <= 0)
         {
@@ -66,9 +68,16 @@ public class HealthBar : MonoBehaviour {
         }
     }
 
-    void takeDamage()
+	public void SetHealth (float percent){
+		//CurrentHealth/MaxHealth = Percent/1;
+		CurrentHealth = (uint)(Mathf.Clamp01(percent)*MaxHealth);
+	}
+
+	void takeDamage()
     {
-        CurrentHealth -= damageAmount;
+        //CurrentHealth -= damageAmount;
+		healthTest -= 0.1f;
+		SetHealth(healthTest);
         freezeTimer = 0.5f;
     }
 }
