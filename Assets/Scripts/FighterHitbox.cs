@@ -20,6 +20,11 @@ public class FighterHitbox : AbstractHitbox {
             return gameObject.name + " RigidBody2D not specified, and no Rigidbody2D is on the root GameObject";
         }
     }
+    string InvalidStateSelectionError {
+        get {
+            return "Invalid HitboxState passed; continuing to process attack as normal";
+        }
+    }
     #endregion
 
     [SerializeField]
@@ -33,6 +38,10 @@ public class FighterHitbox : AbstractHitbox {
     FighterHealth m_health;
     [SerializeField]
     Fighter m_parent;
+    [SerializeField]
+    HitManager m_hitManager;
+    [SerializeField]
+    AttackData m_conflcitResolution;
 
     AttackData m_attack;
     List<AbstractHitbox> m_intersecting = new List<AbstractHitbox> ();
@@ -58,22 +67,11 @@ public class FighterHitbox : AbstractHitbox {
 
     public void Update () {
         if (m_attack && m_intersecting.Count > 0) {
-            var atk = new Attack(data: m_attack, team: m_parent.Team, id: GenerateID(m_attack));
+            var atk = GenerateAttack(m_attack);
             foreach (var c in m_intersecting) {
                 c.Hit (atk);
             }
         }
-    }
-
-    private int GenerateID (AttackData data) {
-        var id = data.GetHashCode () * 23;
-        id <<= data.Priority;
-        id += 29 * m_parent.Team;
-        id *= (int) m_health.CurrentHealth;
-        id <<= 5;
-        id *= Time.frameCount;
-        return id;
-        // return (((data.GetHashCode() * 23) << data.Priority) + 29 * parent.Team) * (int) m_health.CurrentHealth;
     }
 
     /// <summary>
@@ -129,10 +127,50 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="attack">The attack this hitbox is being hit with.</param>
     public override void Hit (Attack attack) {
-        if (m_state == HitboxState.Block) {
-            attack.damageMultiplier *= attack.kData.Chip;
-            attack.launchScale.x = blockingLaunchScale;
-            attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
+        switch (m_state) {
+            case HitboxState.Normal:
+                m_hitManager.AddAttack (attack);
+                break;
+            case HitboxState.Block:
+                attack.damageMultiplier *= attack.kData.Chip;
+                attack.launchScale.x = blockingLaunchScale;
+                attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
+                goto case HitboxState.Normal;
+            case HitboxState.Attack:
+                if (attack.kData.Priority > m_attack.Priority) goto case HitboxState.Normal;
+                else if (attack.kData.Priority == m_attack.Priority)
+                    m_hitManager.AddAttack (GenerateAttack(m_conflcitResolution));
+                break;
+            default:
+                Debug.LogError (InvalidStateSelectionError);
+                goto case HitboxState.Normal;
         }
+    }
+
+    /// <summary>
+    /// Utility method to quickly create an attack from some data.
+    /// </summary>
+    /// <param name="data">The AttackData to create an attack for.</param>
+    /// <returns>An Attack using the given data.</returns>
+    private Attack GenerateAttack (AttackData data, float damageMult = 1.00f,
+        float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {
+        return new Attack (data, m_parent.Team, GenerateID (m_conflcitResolution),
+            damageMult, xKnockbackMult, yKnockbackMult);
+    }
+
+    /// <summary>
+    /// Utility method to generate attack IDs.
+    /// </summary>
+    /// <param name="data">The data to create an id for.</param>
+    /// <returns>An entirely unique id for the data.</returns>
+    private int GenerateID (AttackData data) {
+        var id = data.GetHashCode () * 23;
+        id <<= data.Priority;
+        id += 29 * m_parent.Team;
+        id *= (int) m_health.CurrentHealth;
+        id <<= 5;
+        id *= Time.frameCount;
+        return id;
+        // return (((data.GetHashCode() * 23) << data.Priority) + 29 * parent.Team) * (int) m_health.CurrentHealth;
     }
 }

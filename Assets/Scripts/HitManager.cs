@@ -3,39 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class HitManager : MonoBehaviour {
-    HashSet<Attack> m_previousAttacks = new HashSet<Attack> ();
-    HashSet<Attack> m_currentAttacks = new HashSet<Attack> ();
-
-    public int DamageDealt {
+    Queue<Attack> m_currentAttacks = new Queue<Attack> ();
+    Queue<Attack> m_attackHistory = new Queue<Attack> ();
+    
+    public Attack CurrentAttack {
         get {
-            if (m_currentAttacks.Count == 0) {
-                return 0;
-            }
-            else {
-                var sum = 0;
-                foreach (var atk in m_currentAttacks) {
-                    sum += atk.TotalDamage;
-                }
-                m_currentAttacks.Clear ();
-                return sum;
-            }
+            return m_currentAttacks.Dequeue ();
         }
     }
 
-    // Use this for initialization
-    void Start () {
-
-    }
-
-    // Update is called once per frame
-    void Update () {
-
-    }
+    [SerializeField]
+    uint AttackRecordSize;
 
     public void AddAttack (Attack atk) {
-        if (!m_previousAttacks.Contains (atk)) {
-            m_previousAttacks.Add (atk);
-            m_currentAttacks.Add (atk);
+        if (!m_attackHistory.Contains (atk)) {
+            m_attackHistory.Enqueue (atk);
+            m_currentAttacks.Enqueue (atk);
+            if (m_attackHistory.Count > AttackRecordSize) m_currentAttacks.Dequeue ();
         }
     }
 }
