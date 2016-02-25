@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+[CreateAssetMenu(fileName = "Attack Data", menuName = "Attack Data")]
 public class AttackData : ScriptableObject {
     // Note: Values of the AttackData are separated into fields and their property
     // encapsulations. Fields are accessed by the designers through Inspector;
