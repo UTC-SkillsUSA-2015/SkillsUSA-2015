@@ -39,6 +39,11 @@ public class AttackData : ScriptableObject {
     /// </summary>
     [SerializeField]
     bool m_launchState = false;
+    /// <summary>
+    /// The number of frames the attack remains active.
+    /// </summary>
+    [SerializeField]
+    uint m_numberOfFrames = 1;
     #endregion
     #region Properties
     public int Priority {
@@ -70,6 +75,12 @@ public class AttackData : ScriptableObject {
             return m_launchState;
         }
     }
+
+    public uint NumberOfFrames {
+        get {
+            return m_numberOfFrames;
+        }
+    }
     #endregion
 
     public override int GetHashCode () {
@@ -78,7 +89,7 @@ public class AttackData : ScriptableObject {
         istof += this.name.GetHashCode () >> 2;
         istof *= (m_priority * 67 + (int) (m_chip * 97570));
         istof += (int) (m_launch.magnitude * (100 * m_chip) * (m_launchState ? 1 : -1));
-        istof *= 789 << (int) (m_chip * 10);
+        istof *= 789 << (int) (m_chip * m_numberOfFrames * 10);
         return istof;
     }
 }

@@ -90,9 +90,9 @@ public class FighterHitbox : AbstractHitbox {
     /// Called by the Animator when an attack's hit frames begin.
     /// </summary>
     /// <param name="attack">The data of the attack.</param>
-    public void Attack (AttackData attack, int numberOfFrames) {
+    public void Attack (AttackData attack) {
         m_attack = attack;
-        m_frameTimer = numberOfFrames;
+        m_frameTimer = attack.NumberOfFrames;
         m_state = HitboxState.Attack;
     }
 
