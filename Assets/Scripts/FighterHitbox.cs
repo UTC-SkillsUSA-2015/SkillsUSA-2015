@@ -93,6 +93,7 @@ public class FighterHitbox : AbstractHitbox {
     public void Attack (AttackData attack, int numberOfFrames) {
         m_attack = attack;
         m_frameTimer = numberOfFrames;
+        m_state = HitboxState.Attack;
     }
 
     /// <summary>
@@ -100,6 +101,7 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     void CancelAttack () {
         m_attack = null;
+        m_state = HitboxState.Normal;
     }
 
     /// <summary>

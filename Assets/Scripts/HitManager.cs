@@ -13,7 +13,7 @@ public class HitManager : MonoBehaviour {
     }
 
     [SerializeField]
-    uint AttackRecordSize;
+    uint AttackRecordSize = 20;
 
     public void AddAttack (Attack atk) {
         if (!m_attackHistory.Contains (atk)) {
