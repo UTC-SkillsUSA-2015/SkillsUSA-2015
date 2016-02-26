@@ -92,7 +92,7 @@ public class FighterHitbox : AbstractHitbox {
     /// <param name="attack">The data of the attack.</param>
     public void Attack (AttackData attack) {
         m_attack = attack;
-        m_frameTimer = attack.NumberOfFrames;
+        m_frameTimer = (int) attack.NumberOfFrames;
         m_state = HitboxState.Attack;
     }
 
