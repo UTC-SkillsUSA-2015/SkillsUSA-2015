@@ -26,7 +26,7 @@ public class AttackHandler : MonoBehaviour {
     /// Attack: Heavy_Punch; Hitboxes: Left_Fist, Left_Wrist, Left_Forearm;
     /// Attack: Heavy Punch; Hitboxes: Left Fist, Left Wrist, Left Forearm;
     /// </summary>
-    const string CommandRegex = @"^Attack: *(?<Attack> [\w_ ]+); *Hitboxes: *(?: *(?<Hitboxes> [\w_ ]+),? *)+;$";
+    const string CommandRegex = @"^Attack: *(?<Attack>[\w_ ]+); *Hitboxes: *(?: *(?<Hitboxes>[\w_ ]+),? *)+;$";
 
     Regex reggie = new Regex (CommandRegex);
 
