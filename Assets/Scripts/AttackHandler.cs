@@ -28,7 +28,7 @@ public class AttackHandler : MonoBehaviour {
     /// </summary>
     const string CommandRegex = @"^Attack: *(?<Attack> [\w_ ]+); *Hitboxes: *(?: *(?<Hitboxes> [\w_ ]+),? *)+;$";
 
-    Regex reggie = new Regex (CommandRegex); 
+    Regex reggie = new Regex (CommandRegex);
 
     /// <summary>
     /// Returns a formattable string used if two objects have the same name in one category.
