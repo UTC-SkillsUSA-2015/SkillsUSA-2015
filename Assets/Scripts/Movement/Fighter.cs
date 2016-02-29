@@ -23,9 +23,18 @@ public class Fighter : MonoBehaviour {
             return m_engine.Grounded;
         }
     }
+    public Vector2 LaunchScaleVector {
+        get {
+            return (Vector2) gameObject.transform.right + Vector2.up;
+        }
+    }
+
+    public GameObject opponent;
 
     [SerializeField]
-    AbstractHitbox [] hitboxes;
+    float fwdSpeed = 5.0f;
+    [SerializeField]
+    float backSpeed = 5.0f;
 
     #region Error messages
     string NoMovementEngineError {
@@ -54,7 +63,6 @@ public class Fighter : MonoBehaviour {
             if (!m_anim) Debug.LogError (NoAnimatorError);
 #endif
         }
-        hitboxes = GetComponentsInChildren<AbstractHitbox> ();
     }
 
     // Update is called every frame, if the MonoBehaviour is enabled
