@@ -8,6 +8,16 @@ public class MenuManager : MonoBehaviour {
     [SerializeField]
     GameObject[] menus;
 
+	[SerializeField]
+	Animator anim;
+
+	bool fade = false;
+
+
+	void Update (){
+		anim.SetBool ("Fade", fade);
+	}
+
     void Start()
     {
         ChangeMenu();
@@ -25,7 +35,8 @@ public class MenuManager : MonoBehaviour {
 
     public void TrainingMode()
     {
-        Application.LoadLevel(1);
+		fade = true;
+		StartCoroutine ("loadLevel");
     }
 
     public void OptionsMenu()
@@ -69,4 +80,9 @@ public class MenuManager : MonoBehaviour {
         menus[whichMenu].SetActive(true);
         StopCoroutine("switchMenu");
     }
+
+	IEnumerator loadLevel(){
+		yield return new WaitForSeconds (2);
+		Application.LoadLevel(1);
+	}
 }
