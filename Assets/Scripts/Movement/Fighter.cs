@@ -24,6 +24,9 @@ public class Fighter : MonoBehaviour {
         }
     }
 
+    [SerializeField]
+    AbstractHitbox [] hitboxes;
+
     #region Error messages
     string NoMovementEngineError {
         get {
@@ -51,6 +54,7 @@ public class Fighter : MonoBehaviour {
             if (!m_anim) Debug.LogError (NoAnimatorError);
 #endif
         }
+        hitboxes = GetComponentsInChildren<AbstractHitbox> ();
     }
 
     // Update is called every frame, if the MonoBehaviour is enabled
