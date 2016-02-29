@@ -156,7 +156,7 @@ public class FighterHitbox : AbstractHitbox {
     /// <returns>An Attack using the given data.</returns>
     private Attack GenerateAttack (AttackData data, float damageMult = 1.00f,
         float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {
-        return new Attack (data, m_parent.Team, GenerateID (m_conflcitResolution),
+        return new Attack (data, m_parent.Team, GenerateID (data),
             damageMult, xKnockbackMult, yKnockbackMult);
     }
 
