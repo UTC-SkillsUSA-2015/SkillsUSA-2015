@@ -44,6 +44,11 @@ public class AttackData : ScriptableObject {
     /// </summary>
     [SerializeField]
     uint m_numberOfFrames = 1;
+    /// <summary>
+    /// The amount of frames the opponent is 'locked out' before they can attack again
+    /// </summary>
+    [SerializeField]
+    uint m_hitstun = 5;
     #endregion
     #region Properties
     public int Priority {
@@ -79,6 +84,12 @@ public class AttackData : ScriptableObject {
     public uint NumberOfFrames {
         get {
             return m_numberOfFrames;
+        }
+    }
+
+    public uint Hitstun {
+        get {
+            return m_hitstun;
         }
     }
     #endregion

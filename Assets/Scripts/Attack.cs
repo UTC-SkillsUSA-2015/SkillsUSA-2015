@@ -30,6 +30,11 @@ public class Attack {
             return (int) (kData.Dmg * damageMultiplier);
         }
     }
+    public Vector2 TotalLaunch {
+        get {
+            return kData.Launch.Scale (launchScale);
+        }
+    }
 
     public Attack (AttackData data, int team, int id, float damageMult = 1.00f,
         float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {

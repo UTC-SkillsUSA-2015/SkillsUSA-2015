@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public interface IHealthBar {
+﻿public interface IHealthBar {
     /// <summary>
     /// Sets the current health shown on the health bar.
     /// </summary>

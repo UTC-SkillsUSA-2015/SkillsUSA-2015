@@ -32,10 +32,10 @@ public class FighterHitbox : AbstractHitbox {
     /// <summary>
     /// Optional field. If not specified, will attempt to pull from the root GameObject
     /// </summary>
-    [SerializeField]
-    Rigidbody2D m_rigidbody;
-    [SerializeField]
-    FighterHealth m_health;
+    //[SerializeField]
+    //Rigidbody2D m_rigidbody;
+    //[SerializeField]
+    //FighterHealth m_health;
     [SerializeField]
     Fighter m_parent;
     [SerializeField]
@@ -55,14 +55,14 @@ public class FighterHitbox : AbstractHitbox {
             Debug.LogError (NoColliderError);
         }
 #endif
-        if (!m_rigidbody) {
-            m_rigidbody = gameObject.transform.root.GetComponent<Rigidbody2D> ();
-#if UNITY_EDITOR
-            if (!m_rigidbody) {
-                Debug.LogError (NoRigidbodyError);
-            }
-#endif
-        }
+//        if (!m_rigidbody) {
+//            m_rigidbody = gameObject.transform.root.GetComponent<Rigidbody2D> ();
+//#if UNITY_EDITOR
+//            if (!m_rigidbody) {
+//                Debug.LogError (NoRigidbodyError);
+//            }
+//#endif
+//        }
     }
 
     public void Update () {
@@ -169,7 +169,7 @@ public class FighterHitbox : AbstractHitbox {
         var id = data.GetHashCode () * 23;
         id <<= data.Priority;
         id += 29 * m_parent.Team;
-        id *= (int) m_health.CurrentHealth;
+        id *= (int) m_parent.CurrentHealth;
         id <<= 5;
         id *= Time.frameCount;
         return id;
