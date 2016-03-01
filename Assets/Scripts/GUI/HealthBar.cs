@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour, IHealthBar {
+public class HealthBar : MonoBehaviour/*, IHealthBar*/ {
 
     [SerializeField]
     Color beggining;
