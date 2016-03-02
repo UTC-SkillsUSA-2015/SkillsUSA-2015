@@ -2,7 +2,22 @@
 using System.Collections;
 
 public class FighterHealth : MonoBehaviour {
-    public uint CurrentHealth { get; private set; }
+    [SerializeField]
+    uint maxHealth;
+
+    uint m_currentHealth;
+
+    /// <summary>
+    /// The current health of the fighter.
+    /// </summary>
+    public uint CurrentHealth {
+        get {
+            return m_currentHealth;
+        }
+        set {
+
+        }
+    }
 
     // Use this for initialization
     void Start () {

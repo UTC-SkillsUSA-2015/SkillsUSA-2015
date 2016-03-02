@@ -5,20 +5,20 @@ using System;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SimpleRaycastEngine : Abstract2DPlatformEngine {
     float movement = 0;
-    [SerializeField]
-    float speedMultiplier = 5;
+
+    public float speedMultiplier = 5;
     /// <summary>
     /// Acceleration used while on the ground.
     /// </summary>
     [SerializeField]
-    float groundAcceleration = 0.75f;
+    protected float groundAcceleration = 0.75f;
     /// <summary>
     /// Acceleration used while in the air.
     /// </summary>
     [SerializeField]
-    float airAcceleration = 0.25f;
+    protected float airAcceleration = 0.25f;
     [SerializeField]
-    float RaycastDist = 0.05f;
+    protected float RaycastDist = 0.05f;
     [SerializeField]
     LayerMask ground;
     [SerializeField]
