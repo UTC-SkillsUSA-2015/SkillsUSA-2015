@@ -101,14 +101,16 @@ public class Fighter : MonoBehaviour {
 
     // Update is called every frame, if the MonoBehaviour is enabled
     public void Update () {
+        #region Movement
         float h = Input.GetAxisRaw ("Horizontal");
-        bool jump = Input.GetAxisRaw ("Vertical") == 1;
-
         m_engine.WalkMotion = h * MoveMultiplier (h);
+        bool jump = Input.GetAxisRaw ("Vertical") == 1;
         if (m_engine.Grounded && jump) {
             m_engine.Jump (jumpForce);
         }
+        #endregion
 
+        #region Attacks
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
             stunned = true;
@@ -116,20 +118,46 @@ public class Fighter : MonoBehaviour {
             m_rigid.velocity = atk.TotalLaunch;
             m_health -= atk.TotalDamage;
         }
+        #endregion
+
+        #region Animator
+        m_anim.SetBool ("Stunned", true);
+        m_anim.SetBool ("Grounded", m_engine.Grounded);
+        m_anim.SetBool ("MovingForward", MovingForward (h));
+        m_anim.SetBool ("MovingBackward", MovingBackward (h));
+        if (Input.GetButtonDown ("Light Attack"))
+            m_anim.SetTrigger ("Light");
+        else if (Input.GetButtonDown ("Medium Attack"))
+            m_anim.SetTrigger ("Medium");
+        else if (Input.GetButtonDown ("Heavy Attack"))
+            m_anim.SetTrigger ("Heavy");
+        #endregion
     }
 
-    float MoveMultiplier(float direction) {
-        if ((direction > 0 && face == Facing.Right)
-            || (direction < 0 && face == Facing.Left)) {
+    public void LateUpdate () {
+        if (stunTimer > 0) {
+            stunTimer--;
+        }
+    }
+
+    float MoveMultiplier (float direction) {
+        if (MovingForward (direction)) {
             return fwdSpeed;
         }
-        else if ((direction > 0 && face == Facing.Left)
-            || (direction < 0 && face == Facing.Right)) {
+        else if (MovingBackward (direction)) {
             return backSpeed;
         }
         else {
             return 0;
         }
+    }
+
+    bool MovingForward (float movement) {
+        return (movement > 0 && face == Facing.Right) || (movement < 0 && face == Facing.Left);
+    }
+
+    bool MovingBackward (float movement) {
+        return (movement > 0 && face == Facing.Left) || (movement < 0 && face == Facing.Right);
     }
 
     // This function is called every fixed framerate frame, if the MonoBehaviour is enabled
