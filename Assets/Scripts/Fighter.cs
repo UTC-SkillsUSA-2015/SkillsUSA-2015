@@ -71,7 +71,7 @@ public class Fighter : MonoBehaviour {
     int stunTimer;
     int m_health;
 
-    [HideInInspector]
+    [SerializeField]
     public GameObject opponent;
 
     #region Error messages
