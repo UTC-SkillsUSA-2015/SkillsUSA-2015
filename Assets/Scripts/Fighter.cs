@@ -11,6 +11,8 @@ public class Fighter : MonoBehaviour {
 
     #region Inspector fields
     [SerializeField]
+    FighterInputs m_inputs;
+    [SerializeField]
     float fwdSpeed = 5.0f;
     [SerializeField]
     float backSpeed = 5.0f;
@@ -61,7 +63,11 @@ public class Fighter : MonoBehaviour {
         }
     }
 
-    bool stunned;
+    bool Stunned {
+        get {
+            return stunTimer > 0;
+        }
+    }
     int stunTimer;
     int m_health;
 
@@ -101,22 +107,24 @@ public class Fighter : MonoBehaviour {
 
     // Update is called every frame, if the MonoBehaviour is enabled
     public void Update () {
-        #region Movement
-        float h = Input.GetAxisRaw ("Horizontal");
-        m_engine.WalkMotion = h * MoveMultiplier (h);
-        bool jump = Input.GetAxisRaw ("Vertical") == 1;
-        if (m_engine.Grounded && jump) {
-            m_engine.Jump (jumpForce);
-        }
-        #endregion
-
         #region Attacks
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
-            stunned = true;
             stunTimer = (int) atk.kData.Hitstun + 1;
             m_rigid.velocity = atk.TotalLaunch;
             m_health -= atk.TotalDamage;
+        }
+        #endregion
+
+        #region Movement
+        float h = 0;
+        if (!Stunned) {
+            h = Input.GetAxisRaw (m_inputs.HorizontalAxis);
+            m_engine.WalkMotion = h * MoveMultiplier (h);
+            bool jump = Input.GetButtonDown(m_inputs.Jump);
+            if (m_engine.Grounded && jump) {
+                m_engine.Jump (jumpForce);
+            }
         }
         #endregion
 
@@ -125,11 +133,11 @@ public class Fighter : MonoBehaviour {
         m_anim.SetBool ("Grounded", m_engine.Grounded);
         m_anim.SetBool ("MovingForward", MovingForward (h));
         m_anim.SetBool ("MovingBackward", MovingBackward (h));
-        if (Input.GetButtonDown ("Light Attack"))
+        if (Input.GetButtonDown (m_inputs.LightAttack))
             m_anim.SetTrigger ("Light");
-        else if (Input.GetButtonDown ("Medium Attack"))
+        else if (Input.GetButtonDown (m_inputs.MediumAttack))
             m_anim.SetTrigger ("Medium");
-        else if (Input.GetButtonDown ("Heavy Attack"))
+        else if (Input.GetButtonDown (m_inputs.HeavyAttack))
             m_anim.SetTrigger ("Heavy");
         #endregion
     }

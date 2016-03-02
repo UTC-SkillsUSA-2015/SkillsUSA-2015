@@ -32,7 +32,8 @@ public class Attack {
     }
     public Vector2 TotalLaunch {
         get {
-            return kData.Launch.Scale (launchScale);
+            return Vector2.Scale (kData.Launch, launchScale);
+            // This is wrong: return kData.Launch.Scale (launchScale);
         }
     }
 
