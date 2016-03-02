@@ -9,10 +9,14 @@ using System.Text.RegularExpressions;
 public class AttackHandler : MonoBehaviour {
     [SerializeField]
     AttackData[] attacks;
+#if UNITY_EDITOR
+    [SerializeField]
+    bool debug;
+#endif
 
     IDictionary<string, FighterHitbox> m_hitboxes = new Dictionary<string, FighterHitbox> ();
     IDictionary<string, AttackData> m_attacks = new Dictionary<string, AttackData> ();
-    
+
     /// <summary>
     /// Translates into matching strings of the following format:
     /// Attack: [Attack name]; Hitboxes: [Hitbox name 1], [Hitbox name 2], (etc);
@@ -41,14 +45,18 @@ public class AttackHandler : MonoBehaviour {
         }
     }
 
-    string FailedCommandErrorMessage(string command) {
+    string FailedCommandErrorMessage (string command) {
         return "Invalid command string \"" + command + "\" passed to " + gameObject.name + "'s AttackHandler";
     }
 
     // Use this for initialization
     void Start () {
-        IterateAndAdd (GetComponentsInChildren<FighterHitbox>(), ref m_hitboxes, "Hitbox");
+        IterateAndAdd (GetComponentsInChildren<FighterHitbox> (), ref m_hitboxes, "Hitbox");
         IterateAndAdd (attacks, ref m_attacks, "AttackData");
+#if UNITY_EDITOR
+        DebugKeys ("Hitboxes", m_hitboxes);
+        DebugKeys ("Attacks", m_attacks);
+#endif
     }
 
     // Update is called once per frame
@@ -58,24 +66,46 @@ public class AttackHandler : MonoBehaviour {
 
     public void ParseString (string command) {
         if (!reggie.IsMatch (command)) {
-            throw new Exception (FailedCommandErrorMessage(command));
+            throw new Exception (FailedCommandErrorMessage (command));
         }
         else {
             var groups = reggie.Match (command).Groups;
             var attackName = groups["Attack"].Value;
             var hitboxNames = groups["Hitboxes"].Captures;
 
-            var attack = m_attacks[attackName];
-            for (int i = 0; i < hitboxNames.Count; i++) {
-                m_hitboxes[hitboxNames[i].Value].Attack (attack);
+            string key = "";
+            string dict = "";
+            try {
+                key = attackName;
+                dict = "Attack";
+                var attack = m_attacks[key];
+                dict = "Hitbox";
+                for (int i = 0; i < hitboxNames.Count; i++) {
+                    key = hitboxNames[i].Value;
+                    m_hitboxes[key].Attack (attack);
+                }
+            }
+            catch (KeyNotFoundException knfe) {
+                Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
+                    dict + " dictionary", knfe));
+                DebugKeys ("Hitboxes", m_hitboxes);
+                DebugKeys ("Attacks", m_attacks);
             }
         }
+    }
+
+    void DebugKeys<T, U> (string name, IDictionary<T, U> dict) {
+        var temp = name + ":\n";
+        foreach (var str in dict.Keys) {
+            temp += "'" + str + "'\n";
+        }
+        Debug.Log (temp);
     }
 
     void IterateAndAdd<T> (IEnumerable<T> items, ref IDictionary<string, T> dict, string type)
         where T : UnityEngine.Object {
         foreach (var obj in items) {
-            if (dict.ContainsKey(obj.name)) {
+            if (dict.ContainsKey (obj.name)) {
                 throw new Exception (string.Format (RepeatedNameMessage, type, obj.name, gameObject.name));
             }
             else {
