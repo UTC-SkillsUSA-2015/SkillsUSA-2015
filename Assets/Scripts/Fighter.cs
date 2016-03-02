@@ -107,11 +107,23 @@ public class Fighter : MonoBehaviour {
 
     // Update is called every frame, if the MonoBehaviour is enabled
     public void Update () {
+        #region Rotation
+        var rot = gameObject.transform.rotation;
+        if (face == Facing.Right) {
+            rot.y = 0;
+        }
+        else {
+            rot.y = 180;
+        }
+        gameObject.transform.rotation = rot;
+        #endregion
+
         #region Attacks
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
             stunTimer = (int) atk.kData.Hitstun + 1;
-            m_rigid.velocity = atk.TotalLaunch;
+            m_rigid.velocity = Vector2.Scale(atk.TotalLaunch,
+                Vector2.up + Vector2.right * (face == Facing.Right ? 1 : -1));
             m_health -= atk.TotalDamage;
         }
         #endregion
