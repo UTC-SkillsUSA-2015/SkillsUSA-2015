@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     float timeInSeconds;
 
     [SerializeField]
-    float fseconds;
+    public float fseconds;
 
     [SerializeField]
     float fminutes;

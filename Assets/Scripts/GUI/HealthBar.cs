@@ -20,7 +20,7 @@ public class HealthBar : MonoBehaviour, IHealthBar {
     uint MaxHealth;
 
     [SerializeField]
-    uint CurrentHealth;
+    public uint CurrentHealth;
 
 //    [SerializeField]
 //    uint damageAmount;
