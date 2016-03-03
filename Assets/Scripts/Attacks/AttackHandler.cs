@@ -54,14 +54,11 @@ public class AttackHandler : MonoBehaviour {
         IterateAndAdd (GetComponentsInChildren<FighterHitbox> (), ref m_hitboxes, "Hitbox");
         IterateAndAdd (attacks, ref m_attacks, "AttackData");
 #if UNITY_EDITOR
-        DebugKeys ("Hitboxes", m_hitboxes);
-        DebugKeys ("Attacks", m_attacks);
+        if (debug) {
+            DebugKeys ("Hitboxes", m_hitboxes);
+            DebugKeys ("Attacks", m_attacks);
+        }
 #endif
-    }
-
-    // Update is called once per frame
-    void Update () {
-
     }
 
     public void ParseString (string command) {
@@ -86,10 +83,14 @@ public class AttackHandler : MonoBehaviour {
                 }
             }
             catch (KeyNotFoundException knfe) {
+#if UNITY_EDITOR
                 Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
                     dict + " dictionary", knfe));
-                DebugKeys ("Hitboxes", m_hitboxes);
-                DebugKeys ("Attacks", m_attacks);
+                if (debug) {
+                    DebugKeys ("Hitboxes", m_hitboxes);
+                    DebugKeys ("Attacks", m_attacks);
+                }
+#endif
             }
         }
     }

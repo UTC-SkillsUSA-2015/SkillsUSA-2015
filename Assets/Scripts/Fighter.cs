@@ -32,6 +32,8 @@ public class Fighter : MonoBehaviour {
     int m_team;
     [SerializeField]
     uint m_maxHealth;
+    [SerializeField]
+    bool debug;
     #endregion
 
     public int Team {
@@ -103,6 +105,7 @@ public class Fighter : MonoBehaviour {
                 Debug.LogError (NoAnimatorError);
 #endif
         }
+        m_health = (int) m_maxHealth;
     }
 
     // Update is called every frame, if the MonoBehaviour is enabled
@@ -119,11 +122,17 @@ public class Fighter : MonoBehaviour {
         #endregion
 
         #region Attacks
+        
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
             stunTimer = (int) atk.kData.Hitstun + 1;
-            m_rigid.velocity = Vector2.Scale(atk.TotalLaunch,
-                Vector2.up + Vector2.right * (face == Facing.Right ? 1 : -1));
+            Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
+#if UNITY_EDITOR
+            if (debug) {
+                Debug.Log ("Scaler is " + scaler);
+            }
+#endif
+            m_rigid.velocity = Vector2.Scale(atk.TotalLaunch, scaler);
             m_health -= atk.TotalDamage;
         }
         #endregion

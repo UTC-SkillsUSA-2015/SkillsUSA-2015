@@ -18,19 +18,32 @@ public class HitManager : MonoBehaviour {
     }
     public bool HasAttack {
         get {
-            return m_currentAttacks.Count != 0;
+            return m_currentAttacks.Count > 0;
         }
     }
+    [SerializeField]
+    bool debug;
 
     [SerializeField]
     uint AttackRecordSize = 20;
 
     public void AddAttack (Attack atk) {
+#if UNITY_EDITOR
+        if (debug) {
+            Debug.Log ("Recieved attack " + atk.kData.name, gameObject);
+        }
+#endif
         if (!m_attackHistory.Contains (atk)) {
+            Debug.Log ("Used attack");
             m_attackHistory.Enqueue (atk);
             m_currentAttacks.Enqueue (atk);
             if (m_attackHistory.Count > AttackRecordSize)
-                m_currentAttacks.Dequeue ();
+                m_attackHistory.Dequeue ();
         }
+#if UNITY_EDITOR
+        else if (debug) {
+            Debug.Log ("Ignored attack");
+        }
+#endif
     }
 }

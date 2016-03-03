@@ -42,6 +42,8 @@ public class FighterHitbox : AbstractHitbox {
     HitManager m_hitManager;
     [SerializeField]
     AttackData m_conflcitResolution;
+    [SerializeField]
+    bool debug;
 
     AttackData m_attack;
     List<AbstractHitbox> m_intersecting = new List<AbstractHitbox> ();
@@ -109,9 +111,19 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="collision">The collider that entered</param>
     public override void OnTriggerEnter2D (Collider2D collision) {
+#if UNITY_EDITOR
+        if (debug) {
+            Debug.Log (collision.name + " intersected " + gameObject.name);
+        }
+#endif
         var otherHitbox = collision.GetComponent<AbstractHitbox> ();
         if (otherHitbox /* ... is not null */ && otherHitbox.transform.root != transform.root) {
             m_intersecting.Add (otherHitbox);
+#if UNITY_EDITOR
+            if (debug) {
+                Debug.Log (collision.name + " added to " + gameObject.name + "'s intersecting hitboxes");
+            }
+#endif
         }
     }
 
@@ -120,6 +132,11 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="collision">The collider that left</param>
     public void OnTriggerExit2D (Collider2D collision) {
+#if UNITY_EDITOR
+        if (debug) {
+            Debug.Log (collision.name + " removed from " + gameObject.name + "'s intersecting hitboxes");
+        }
+#endif
         m_intersecting.Remove (collision.GetComponent<AbstractHitbox> ());
     }
 
@@ -129,11 +146,26 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="attack">The attack this hitbox is being hit with.</param>
     public override void Hit (Attack attack) {
+#if UNITY_EDITOR
+        if (debug) {
+            Debug.Log (gameObject.name + " has been hit by " + attack.kData.name);
+        }
+#endif
         switch (m_state) {
             case HitboxState.Normal:
+#if UNITY_EDITOR
+                if (debug) {
+                    Debug.Log ("Adding attack to hitmanager", gameObject);
+                }
+#endif
                 m_hitManager.AddAttack (attack);
                 break;
             case HitboxState.Block:
+#if UNITY_EDITOR
+                if (debug) {
+                    Debug.Log ("Blocked");
+                }
+#endif
                 attack.damageMultiplier *= attack.kData.Chip;
                 attack.launchScale.x = blockingLaunchScale;
                 attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
@@ -172,6 +204,11 @@ public class FighterHitbox : AbstractHitbox {
         id *= (int) m_parent.CurrentHealth;
         id <<= 5;
         id *= Time.frameCount;
+#if UNITY_EDITOR
+        if (debug) {
+            Debug.Log ("Id: " + id);
+        }
+#endif
         return id;
         // return (((data.GetHashCode() * 23) << data.Priority) + 29 * parent.Team) * (int) m_health.CurrentHealth;
     }
