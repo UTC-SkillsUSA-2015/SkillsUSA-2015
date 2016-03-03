@@ -33,6 +33,8 @@ public class Fighter : MonoBehaviour {
     [SerializeField]
     uint m_maxHealth;
     [SerializeField]
+    HealthBar m_healthbar;
+    [SerializeField]
     bool debug;
     #endregion
 
@@ -134,6 +136,7 @@ public class Fighter : MonoBehaviour {
 #endif
             m_rigid.velocity = Vector2.Scale(atk.TotalLaunch, scaler);
             m_health -= atk.TotalDamage;
+            m_healthbar.SetHealth ((float) m_health / m_maxHealth);
         }
         #endregion
 
@@ -150,7 +153,7 @@ public class Fighter : MonoBehaviour {
         #endregion
 
         #region Animator
-        m_anim.SetBool ("Stunned", true);
+        m_anim.SetBool ("Stunned", Stunned);
         m_anim.SetBool ("Grounded", m_engine.Grounded);
         m_anim.SetBool ("MovingForward", MovingForward (h));
         m_anim.SetBool ("MovingBackward", MovingBackward (h));
@@ -187,10 +190,5 @@ public class Fighter : MonoBehaviour {
 
     bool MovingBackward (float movement) {
         return (movement > 0 && face == Facing.Left) || (movement < 0 && face == Facing.Right);
-    }
-
-    // This function is called every fixed framerate frame, if the MonoBehaviour is enabled
-    public void FixedUpdate () {
-
     }
 }
