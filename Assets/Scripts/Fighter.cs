@@ -134,8 +134,6 @@ public class Fighter : MonoBehaviour {
                 Debug.Log ("Scaler is " + scaler);
             }
 #endif
-            if (stunTimer > 0)
-                m_engine.enabled = false;
             m_rigid.velocity = Vector2.Scale(atk.TotalLaunch, scaler);
             m_health -= atk.TotalDamage;
             m_healthbar.SetHealth ((float) m_health / m_maxHealth);
