@@ -47,7 +47,7 @@ public class SuperMeter : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log(fillAmount);
+        //Debug.Log(fillAmount);
         ChangeColors();
         superFill.fillAmount = 0;
         PowerLevel = startingPowerLevel;

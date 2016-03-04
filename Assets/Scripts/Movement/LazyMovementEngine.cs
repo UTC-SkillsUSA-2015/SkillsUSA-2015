@@ -5,7 +5,8 @@ using System;
 public class LazyMovementEngine : Abstract2DPlatformEngine {
     public override float WalkMotion {
         set {
-            m_Rigidbody.velocity = new Vector2 (value, m_Rigidbody.velocity.y);
+            if (Grounded)
+                m_Rigidbody.velocity = new Vector2 (value, m_Rigidbody.velocity.y);
         }
     }
 
