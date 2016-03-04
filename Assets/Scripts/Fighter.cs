@@ -21,6 +21,10 @@ public class Fighter : MonoBehaviour {
     [SerializeField]
     Rigidbody2D m_rigid;
     [SerializeField]
+    AudioSource m_audio;
+    [SerializeField]
+    FighterSounds m_sounds;
+    [SerializeField]
     HitManager m_hitManager;
     //[SerializeField]
     //FighterHealth m_health;
@@ -112,6 +116,11 @@ public class Fighter : MonoBehaviour {
 
     // Update is called every frame, if the MonoBehaviour is enabled
     public void Update () {
+        #region Sound flags
+        bool jump = false;
+        bool hit = false;
+        #endregion
+
         #region Rotation
         var rot = gameObject.transform.rotation;
         if (face == Facing.Right) {
@@ -124,7 +133,6 @@ public class Fighter : MonoBehaviour {
         #endregion
 
         #region Attacks
-        
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
             stunTimer = (int) atk.kData.Hitstun + 1;
@@ -134,8 +142,11 @@ public class Fighter : MonoBehaviour {
                 Debug.Log ("Scaler is " + scaler);
             }
 #endif
-            m_rigid.velocity = Vector2.Scale(atk.TotalLaunch, scaler);
-            m_health -= atk.TotalDamage;
+            m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
+            if (atk.TotalDamage > 0) {
+                hit = true;
+                m_health -= atk.TotalDamage;
+            }
             m_healthbar.SetHealth ((float) m_health / m_maxHealth);
         }
         #endregion
@@ -145,7 +156,7 @@ public class Fighter : MonoBehaviour {
         if (!Stunned) {
             h = Input.GetAxisRaw (m_inputs.HorizontalAxis);
             m_engine.WalkMotion = h * MoveMultiplier (h);
-            bool jump = Input.GetButtonDown(m_inputs.Jump);
+            jump = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
             if (m_engine.Grounded && jump) {
                 m_engine.Jump (jumpForce);
             }
@@ -163,6 +174,20 @@ public class Fighter : MonoBehaviour {
             m_anim.SetTrigger ("Medium");
         else if (Input.GetButtonDown (m_inputs.HeavyAttack))
             m_anim.SetTrigger ("Heavy");
+        #endregion
+
+        #region Audio
+        if (hit) {
+            m_audio.clip = m_sounds.randomHit;
+        }
+        else if (jump) {
+            m_audio.clip = m_sounds.randomJump;
+        }
+
+        if (jump || hit) {
+            m_audio.pitch = Random.Range (0.8f, 1.2f);
+            m_audio.Play ();
+        }
         #endregion
     }
 
