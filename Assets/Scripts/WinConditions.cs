@@ -45,11 +45,12 @@ public class WinConditions : MonoBehaviour {
         P1Health = (float)P1Script.CurrentHealth;
         P2Health = (float)P2Script.CurrentHealth;
 
-        if(P1Health == 0 || P2Health == 0)
-        {
-            Debug.Log("WORK DAMMMIT!");
-            CheckWinner();
+        if (P1Health == 0 || P2Health == 0) {
+            Debug.Log ("WORK DAMMMIT!");
+            CheckWinner ();
         }
+        else if (timeer == 0)
+            CheckWinner ();
     }
 
     void CheckWinner()
