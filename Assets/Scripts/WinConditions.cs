@@ -32,7 +32,8 @@ public class WinConditions : MonoBehaviour {
     bool playerOneWins = false;
     bool playerTwoWins = false;
     bool tie = false;
-
+    public bool started { get; private set; }
+    public bool ended { get; private set; }
 
 	void Start () {
         Time.timeScale = 0;
@@ -77,6 +78,7 @@ public class WinConditions : MonoBehaviour {
 
     void DisplayWinner()
     {
+        ended = true;
         winTexts[winText].SetActive(true);
         endCanvas.SetActive(true);
         Time.timeScale = 0;
@@ -86,6 +88,7 @@ public class WinConditions : MonoBehaviour {
     {
         Time.timeScale = 1;
         startCanvas.SetActive(false);
+        started = true;
     }
 
     public void restart()
