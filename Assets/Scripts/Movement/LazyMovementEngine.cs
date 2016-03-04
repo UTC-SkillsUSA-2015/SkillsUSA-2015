@@ -5,7 +5,7 @@ using System;
 public class LazyMovementEngine : Abstract2DPlatformEngine {
     public override float WalkMotion {
         set {
-            if (Grounded)
+            if (Grounded && !ignoreInputs)
                 m_Rigidbody.velocity = new Vector2 (value, m_Rigidbody.velocity.y);
         }
     }
@@ -19,6 +19,8 @@ public class LazyMovementEngine : Abstract2DPlatformEngine {
 
     float horizontal;
     bool refresh;
+
+    public bool ignoreInputs = false;
 
     public void FixedUpdate () {
         if (refresh) {
