@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(fileName = "Fighter Soundset", menuName = "Fighter Soundset")]
+[CreateAssetMenu (fileName = "Fighter Soundset", menuName = "Fighter Soundset")]
 public class FighterSounds : ScriptableObject {
     [SerializeField]
     AudioClip[] jump;
@@ -12,13 +12,13 @@ public class FighterSounds : ScriptableObject {
 
     public AudioClip randomJump {
         get {
-            return randomSound(jump);
+            return randomSound (jump);
         }
     }
 
     public AudioClip randomHit {
         get {
-            return randomSound(hit);
+            return randomSound (hit);
         }
     }
 
@@ -28,7 +28,7 @@ public class FighterSounds : ScriptableObject {
         }
     }
 
-    AudioClip randomSound(AudioClip[] clips) {
+    AudioClip randomSound (AudioClip[] clips) {
         return clips[Random.Range (0, clips.Length)];
     }
 }

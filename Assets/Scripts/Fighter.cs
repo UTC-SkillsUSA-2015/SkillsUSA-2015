@@ -185,8 +185,9 @@ public class Fighter : MonoBehaviour {
         }
 
         if (jump || hit) {
-            m_audio.pitch = Random.Range (0.8f, 1.2f);
+            m_audio.pitch = Random.Range (0.95f, 1.2f);
             m_audio.Play ();
+            /*the program won't compile unless this semicolon is here I DUNNO*/;
         }
         #endregion
     }
