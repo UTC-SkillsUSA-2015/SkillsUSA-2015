@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour/*, IHealthBar*/ {
+public class HealthBar : MonoBehaviour, IHealthBar {
 
     [SerializeField]
     Color beggining;
@@ -20,7 +20,7 @@ public class HealthBar : MonoBehaviour/*, IHealthBar*/ {
     uint MaxHealth;
 
     [SerializeField]
-    uint CurrentHealth;
+    public uint CurrentHealth;
 
 //    [SerializeField]
 //    uint damageAmount;
@@ -62,10 +62,10 @@ public class HealthBar : MonoBehaviour/*, IHealthBar*/ {
             healthBarSlowFill.fillAmount += (healthBarFill.fillAmount - healthBarSlowFill.fillAmount) / slowSpeed;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            takeDamage();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    takeDamage();
+        //}
     }
 
 	public void SetHealth (float percent){
