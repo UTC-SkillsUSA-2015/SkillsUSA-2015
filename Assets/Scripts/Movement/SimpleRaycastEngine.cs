@@ -29,9 +29,9 @@ public class SimpleRaycastEngine : Abstract2DPlatformEngine {
     float Acceleration {
         get {
             var a = (Grounded ? groundAcceleration : airAcceleration);
-            if (DebugMode) {
-                Debug.Log ("Using accel. " + a);
-            }
+            //if (DebugMode) {
+            //    Debug.Log ("Using accel. " + a);
+            //}
             return a;
         }
     }
@@ -50,10 +50,10 @@ public class SimpleRaycastEngine : Abstract2DPlatformEngine {
         velocity.x = movement * speedMultiplier;
         m_Rigidbody.velocity = velocity;
         Grounded = Physics2D.Raycast ((Vector2) transform.position + mainHitbox.offset + Vector2.down * (mainHitbox.size.y / 2),Vector2.down, RaycastDist, ground);
-        if (DebugMode) {
-            Debug.DrawRay ((Vector2) transform.position + mainHitbox.offset + Vector2.down * (mainHitbox.size.y / 2), Vector2.down * RaycastDist);
-            Debug.Log ("FixedUpdate called");
-        }
+        //if (DebugMode) {
+        //    Debug.DrawRay ((Vector2) transform.position + mainHitbox.offset + Vector2.down * (mainHitbox.size.y / 2), Vector2.down * RaycastDist);
+        //    Debug.Log ("FixedUpdate called");
+        //}
     }
 
     IEnumerator Accelerate(float newSpeed) {
