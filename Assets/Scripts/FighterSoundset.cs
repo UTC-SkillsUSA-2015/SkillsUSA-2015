@@ -2,7 +2,7 @@
 using System.Collections;
 
 [CreateAssetMenu (fileName = "Fighter Soundset", menuName = "Fighter Soundset")]
-public class FighterSounds : ScriptableObject {
+public class FighterSoundset : ScriptableObject {
     [SerializeField]
     AudioClip[] jump;
     [SerializeField]

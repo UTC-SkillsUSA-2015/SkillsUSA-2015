@@ -54,7 +54,7 @@ public class AttackData : ScriptableObject {
     /// </summary>
     [SerializeField]
     [Tooltip("Optional")]
-    AudioClip m_hitSound;
+    SoundGroup m_contactSounds;
     #endregion
     #region Properties
     public int Priority {
@@ -99,9 +99,9 @@ public class AttackData : ScriptableObject {
         }
     }
 
-    public AudioClip HitSound {
+    public SoundGroup ContactSounds {
         get {
-            return m_hitSound;
+            return m_contactSounds;
         }
     }
     #endregion
@@ -113,8 +113,8 @@ public class AttackData : ScriptableObject {
         istof *= (m_priority * 67 + (int) (m_chip * 97570));
         istof += (int) (m_launch.magnitude * (100 * m_chip) * (m_launchState ? 1 : -1));
         istof *= 789 << (int) (m_chip * m_numberOfFrames * 10);
-        if (m_hitSound)
-            istof += m_hitSound.GetHashCode ();
+        if (m_contactSounds)
+            istof += m_contactSounds.GetHashCode ();
         else
             istof += 23;
         return istof;

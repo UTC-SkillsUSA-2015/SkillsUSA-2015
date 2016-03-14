@@ -21,13 +21,14 @@ public class Fighter : AbstractFighter {
     [SerializeField]
     Rigidbody2D m_rigid;
     [SerializeField]
-    AudioSource m_audio;
+    AudioSource m_voice;
     [SerializeField]
-    FighterSounds m_sounds;
+    [Tooltip("Optional")]
+    AudioSource m_contact;
+    [SerializeField]
+    FighterSoundset m_sounds;
     [SerializeField]
     HitManager m_hitManager;
-    //[SerializeField]
-    //FighterHealth m_health;
     [SerializeField]
     Abstract2DPlatformEngine m_engine;
     [SerializeField]
@@ -81,6 +82,8 @@ public class Fighter : AbstractFighter {
 
     bool hitFlag;
     bool jumpFlag;
+    SoundGroup contactSounds;
+
     float movementInput;
 
     [SerializeField]
@@ -140,6 +143,7 @@ public class Fighter : AbstractFighter {
                 hitFlag = true;
                 m_health -= atk.TotalDamage;
             }
+            contactSounds = atk.kData.ContactSounds;
             m_healthbar.SetHealth ((float) m_health / m_maxHealth);
         }
     }
@@ -169,16 +173,21 @@ public class Fighter : AbstractFighter {
     }
 
     protected override void UpdateAudio () {
-        if (hitFlag) {
-            m_audio.clip = m_sounds.randomHit;
-        }
-        else if (jumpFlag) {
-            m_audio.clip = m_sounds.randomJump;
+        if (hitFlag && contactSounds && m_contact) {
+            m_contact.clip = contactSounds.RandomClip;
+            m_contact.pitch = Random.Range (0.95f, 1.2f);
+            m_contact.Play();
         }
 
+        if (hitFlag) {
+            m_voice.clip = m_sounds.randomHit;
+        }
+        else if (jumpFlag) {
+            m_voice.clip = m_sounds.randomJump;
+        }
         if (jumpFlag || hitFlag) {
-            m_audio.pitch = Random.Range (0.95f, 1.2f);
-            m_audio.Play ();
+            m_voice.pitch = Random.Range (0.95f, 1.2f);
+            m_voice.Play ();
         }
         hitFlag = false;
         jumpFlag = false;
