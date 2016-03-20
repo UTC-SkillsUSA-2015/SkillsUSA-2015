@@ -25,7 +25,7 @@ public class CharacterHealth : MonoBehaviour {
 
 	void Update () 
 	{
-		if (p1Health == 0) 
+		if (p1Health < 0) 
 		{
 			p2CM01.SetActive (true);
 			p1Health = 100;
@@ -33,7 +33,7 @@ public class CharacterHealth : MonoBehaviour {
 			p2Health = 100;
 			Setp2HealthText ();
 		}
-		if (p2Health == 0) 
+		if (p2Health < 0) 
 		{
 			p1CM01.SetActive (true);
 			p1Health = 100;
@@ -43,15 +43,8 @@ public class CharacterHealth : MonoBehaviour {
 		}
 		if (p1CM01.activeSelf && p2Health == 0) 
 		{
+			Debug.Log ("2nd p1 win");
 			p1CM02.SetActive (true);
-			p1Health = 100;
-			Setp1HealthText ();
-			p2Health = 100;
-			Setp2HealthText ();
-		}
-		if (p1CM02.activeSelf && p2Health == 0) 
-		{
-			p1CM03.SetActive (true);
 			p1Health = 100;
 			Setp1HealthText ();
 			p2Health = 100;
@@ -65,8 +58,18 @@ public class CharacterHealth : MonoBehaviour {
 			p2Health = 100;
 			Setp2HealthText ();
 		}
-		if (p2CM02.activeSelf && p1Health == 0) 
+		if (p1CM02.activeSelf && p2Health == 20) 
 		{
+			Debug.Log ("AND");
+			p1CM03.SetActive (true);
+			p1Health = 100;
+			Setp1HealthText ();
+			p2Health = 100;
+			Setp2HealthText ();
+		}
+		if (p2CM02.activeSelf && p1Health == 20) 
+		{
+			Debug.Log ("FINALLY");
 			p2CM03.SetActive (true);
 			p1Health = 100;
 			Setp1HealthText ();
