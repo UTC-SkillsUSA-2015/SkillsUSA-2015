@@ -27,7 +27,6 @@ public class CharacterHealth : MonoBehaviour {
 	public GameObject p2First;
 	public GameObject p2Second;
 
-
 	void Start () 
 	{
 		EndCanvas.enabled = false;
