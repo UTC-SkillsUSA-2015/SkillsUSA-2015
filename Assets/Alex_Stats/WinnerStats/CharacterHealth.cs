@@ -4,6 +4,8 @@ using System.Collections;
 
 public class CharacterHealth : MonoBehaviour {
 
+	public Canvas MainCanvas;
+	public Canvas EndCanvas;
 	private static int p1Health;
 	public Text p1HealthText;
 	private static int p2Health;
@@ -14,9 +16,21 @@ public class CharacterHealth : MonoBehaviour {
 	public GameObject p2CM01;
 	public GameObject p2CM02;
 	public GameObject p2CM03;
+	public GameObject p1Bronze;
+	public GameObject p1Silver;
+	public GameObject p1Gold;
+	public GameObject p2Bronze;
+	public GameObject p2Silver;
+	public GameObject p2Gold;
+	public GameObject p1First;
+	public GameObject p1Second;
+	public GameObject p2First;
+	public GameObject p2Second;
+
 
 	void Start () 
 	{
+		EndCanvas.enabled = false;
 		p1Health = 100;
 		Setp1HealthText ();
 		p2Health = 100;
@@ -32,6 +46,7 @@ public class CharacterHealth : MonoBehaviour {
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p2Bronze.SetActive (true);
 		}
 		if (p2Health < 0) 
 		{
@@ -40,15 +55,16 @@ public class CharacterHealth : MonoBehaviour {
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p1Bronze.SetActive (true);
 		}
 		if (p1CM01.activeSelf && p2Health == 0) 
 		{
-			Debug.Log ("2nd p1 win");
 			p1CM02.SetActive (true);
 			p1Health = 100;
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p1Silver.SetActive (true);
 		}
 		if (p2CM01.activeSelf && p1Health == 0) 
 		{
@@ -57,24 +73,33 @@ public class CharacterHealth : MonoBehaviour {
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p2Silver.SetActive (true);
 		}
 		if (p1CM02.activeSelf && p2Health == 20) 
 		{
-			Debug.Log ("AND");
 			p1CM03.SetActive (true);
 			p1Health = 100;
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p1Gold.SetActive (true);
+			p1First.SetActive (true);
+			p2Second.SetActive (true);
+			MainCanvas.enabled = true;
+			EndCanvas.enabled = true;
 		}
 		if (p2CM02.activeSelf && p1Health == 20) 
 		{
-			Debug.Log ("FINALLY");
 			p2CM03.SetActive (true);
 			p1Health = 100;
 			Setp1HealthText ();
 			p2Health = 100;
 			Setp2HealthText ();
+			p2Gold.SetActive (true);
+			p2First.SetActive (true);
+			p1Second.SetActive (true);
+			MainCanvas.enabled = true;
+			EndCanvas.enabled = true;
 		}
 	}
 	public void Hurtp1()
