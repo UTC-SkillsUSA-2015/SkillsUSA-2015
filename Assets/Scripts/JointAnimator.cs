@@ -6,50 +6,53 @@ public class JointAnimator : MonoBehaviour {
 
     public Joints mabones;
 
-    [Range(0, 135)]
-    public float LeftLowerArmANGLE;    
+    [Range(-360, 360)]
+    public float LeftLowerArmANGLE;
 
-    [Range(0, 135)]
-    public float RightLowerArmANGLE;    
+    [Range(-360, 360)]
+    public float RightLowerArmANGLE;
 
-    [Range(-90, 90)]
-    public float LeftShoulderANGLE;    
+    [Range(-360, 360)]
+    public float LeftShoulderANGLE;
 
-    [Range(-90, 90)]
-    public float RightShoulderANGLE;   
+    [Range(-360, 360)]
+    public float RightShoulderANGLE;
 
-    [Range(-45, 10)]
+    [Range(-360, 360)]
     public float LeftHandANGLE;
 
-    [Range(-45, 10)]
-    public float RightHandANGLE;   
+    [Range(-360, 360)]
+    public float RightHandANGLE;
 
-    [Range(-30, 70)]
-    public float UpperTorsoANGLE;    
+    [Range(-360, 360)]
+    public float UpperTorsoANGLE;
 
-    [Range(-10, 45)]
-    public float WaistANGLE;   
+    [Range(-360, 360)]
+    public float WaistANGLE;
 
-    [Range(-30, 80)]
+    [Range(-360, 360)]
     public float LeftThighANGLE;
 
-    [Range(-30, 80)]
-    public float RightThighANGLE;   
+    [Range(-360, 360)]
+    public float RightThighANGLE;
 
-    [Range(-135, 0)]
-    public float LeftLowerLegANGLE;    
+    [Range(-360, 360)]
+    public float LeftLowerLegANGLE;
 
-    [Range(-135, 0)]
-    public float RightLowerLegANGLE;    
+    [Range(-360, 360)]
+    public float RightLowerLegANGLE;
 
-    [Range(-70, 0)]
-    public float LeftFootANGLE;    
+    [Range(-360, 360)]
+    public float LeftFootANGLE;
 
-    [Range(-70, 0)]
+    [Range(-360, 360)]
     public float RightFootANGLE;    
 
-    [Range(-60, 60)]
-    public float HeadANGLE;   
+    [Range(-360, 360)]
+    public float HeadANGLE;
+
+    [Range(-360, 360)]
+    public float WeaponANGLE;
 
     void Update()
     {
@@ -68,6 +71,7 @@ public class JointAnimator : MonoBehaviour {
         mabones.LeftFoot.transform.localRotation = Quaternion.Euler(0, 0, LeftFootANGLE);
         mabones.RightFoot.transform.localRotation = Quaternion.Euler(0, 0, RightFootANGLE);
         mabones.Head.transform.localRotation = Quaternion.Euler(0, 0, HeadANGLE);
+        mabones.Weapon.transform.localRotation = Quaternion.Euler(0, 0, WeaponANGLE);
     }
 }
 
@@ -103,5 +107,7 @@ public class Joints
     public GameObject RightFoot;
 
     public GameObject Head;
+
+    public GameObject Weapon;
 
 }
