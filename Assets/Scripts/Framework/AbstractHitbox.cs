@@ -2,6 +2,12 @@
 using System.Collections;
 
 public abstract class AbstractHitbox : MonoBehaviour {
+    public enum State {
+        Normal,
+        Block,
+        Attack
+    }
+    public State state;
     [SerializeField]
     Collider2D hitbox;
     /// <summary>

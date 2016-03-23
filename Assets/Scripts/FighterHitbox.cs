@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using System;
 
 public class FighterHitbox : AbstractHitbox {
-    public enum HitboxState {
-        Normal,
-        Block,
-        Attack
-    }
-
     #region Error messages
     string NoColliderError {
         get {
@@ -27,8 +21,6 @@ public class FighterHitbox : AbstractHitbox {
     }
     #endregion
 
-    [SerializeField]
-    HitboxState m_state;
     /// <summary>
     /// Optional field. If not specified, will attempt to pull from the root GameObject
     /// </summary>
@@ -95,7 +87,7 @@ public class FighterHitbox : AbstractHitbox {
     public void Attack (AttackData attack) {
         m_attack = attack;
         m_frameTimer = (int) attack.NumberOfFrames;
-        m_state = HitboxState.Attack;
+        m_state = State.Attack;
     }
 
     /// <summary>
@@ -103,7 +95,7 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     void CancelAttack () {
         m_attack = null;
-        m_state = HitboxState.Normal;
+        m_state = State.Normal;
     }
 
     /// <summary>
@@ -152,7 +144,7 @@ public class FighterHitbox : AbstractHitbox {
         }
 #endif
         switch (m_state) {
-            case HitboxState.Normal:
+            case State.Normal:
 #if UNITY_EDITOR
                 if (debug) {
                     Debug.Log ("Adding attack to hitmanager", gameObject);
@@ -160,7 +152,7 @@ public class FighterHitbox : AbstractHitbox {
 #endif
                 m_hitManager.AddAttack (attack);
                 break;
-            case HitboxState.Block:
+            case State.Block:
 #if UNITY_EDITOR
                 if (debug) {
                     Debug.Log ("Blocked");
@@ -169,15 +161,15 @@ public class FighterHitbox : AbstractHitbox {
                 attack.damageMultiplier *= attack.kData.Chip;
                 attack.launchScale.x = blockingLaunchScale;
                 attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
-                goto case HitboxState.Normal;
-            case HitboxState.Attack:
-                if (attack.kData.Priority > m_attack.Priority) goto case HitboxState.Normal;
+                goto case State.Normal;
+            case State.Attack:
+                if (attack.kData.Priority > m_attack.Priority) goto case State.Normal;
                 else if (attack.kData.Priority == m_attack.Priority)
                     m_hitManager.AddAttack (GenerateAttack(m_conflcitResolution));
                 break;
             default:
                 Debug.LogError (InvalidStateSelectionError);
-                goto case HitboxState.Normal;
+                goto case State.Normal;
         }
     }
 
