@@ -87,7 +87,7 @@ public class FighterHitbox : AbstractHitbox {
     public void Attack (AttackData attack) {
         m_attack = attack;
         m_frameTimer = (int) attack.NumberOfFrames;
-        m_state = State.Attack;
+        state = State.Attack;
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     void CancelAttack () {
         m_attack = null;
-        m_state = State.Normal;
+        state = State.Normal;
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public class FighterHitbox : AbstractHitbox {
             Debug.Log (gameObject.name + " has been hit by " + attack.kData.name);
         }
 #endif
-        switch (m_state) {
+        switch (state) {
             case State.Normal:
 #if UNITY_EDITOR
                 if (debug) {

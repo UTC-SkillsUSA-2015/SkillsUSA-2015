@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using State = AbstractHitbox.State
+using State = AbstractHitbox.State;
 
 public class StateHandler : AbstractHitboxCommandParser<FighterHitbox> {
     #region Hiding
