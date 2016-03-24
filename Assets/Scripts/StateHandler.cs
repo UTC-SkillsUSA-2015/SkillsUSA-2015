@@ -20,6 +20,10 @@ public class StateHandler : AbstractHitboxCommandParser<FighterHitbox> {
         }
     }
 
+    public void ParseStringWrapper(string command) {
+        Debug.Log ("Command");
+    }
+
     public override void ParseString (string command) {
         var matches = kFormatMatcher.Matches (command);
         foreach (Match match in matches) {
