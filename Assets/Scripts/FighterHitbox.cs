@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class FighterHitbox : AbstractHitbox {
+public class FighterHitbox : AbstractAttackingHitbox {
     #region Error messages
     string NoColliderError {
         get {
@@ -20,6 +20,12 @@ public class FighterHitbox : AbstractHitbox {
         }
     }
     #endregion
+
+    protected override int Team {
+        get {
+            return m_parent.Team;
+        }
+    }
 
     /// <summary>
     /// Optional field. If not specified, will attempt to pull from the root GameObject
@@ -44,19 +50,9 @@ public class FighterHitbox : AbstractHitbox {
 
     // Use this for initialization
     void Start () {
-#if UNITY_EDITOR
         if (!GetComponent<Collider2D> ()) {
             Debug.LogError (NoColliderError);
         }
-#endif
-//        if (!m_rigidbody) {
-//            m_rigidbody = gameObject.transform.root.GetComponent<Rigidbody2D> ();
-//#if UNITY_EDITOR
-//            if (!m_rigidbody) {
-//                Debug.LogError (NoRigidbodyError);
-//            }
-//#endif
-//        }
     }
 
     public void Update () {
@@ -84,7 +80,7 @@ public class FighterHitbox : AbstractHitbox {
     /// Called by the Animator when an attack's hit frames begin.
     /// </summary>
     /// <param name="attack">The data of the attack.</param>
-    public void Attack (AttackData attack) {
+    public override void Attack (AttackData attack) {
         m_attack = attack;
         m_frameTimer = (int) attack.NumberOfFrames;
         state = State.Attack;
@@ -102,7 +98,7 @@ public class FighterHitbox : AbstractHitbox {
     /// Adds a hitbox to the internal hitbox list
     /// </summary>
     /// <param name="collision">The collider that entered</param>
-    public override void OnTriggerEnter2D (Collider2D collision) {
+    public void OnTriggerEnter2D (Collider2D collision) {
 #if UNITY_EDITOR
         if (debug) {
             Debug.Log (collision.name + " intersected " + gameObject.name);
@@ -173,23 +169,14 @@ public class FighterHitbox : AbstractHitbox {
         }
     }
 
-    /// <summary>
-    /// Utility method to quickly create an attack from some data.
-    /// </summary>
-    /// <param name="data">The AttackData to create an attack for.</param>
-    /// <returns>An Attack using the given data.</returns>
-    private Attack GenerateAttack (AttackData data, float damageMult = 1.00f,
-        float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {
-        return new Attack (data, m_parent.Team, GenerateID (data),
-            damageMult, xKnockbackMult, yKnockbackMult);
-    }
+    
 
     /// <summary>
     /// Utility method to generate attack IDs.
     /// </summary>
     /// <param name="data">The data to create an id for.</param>
     /// <returns>An entirely unique id for the data.</returns>
-    private int GenerateID (AttackData data) {
+    protected override int GenerateID (AttackData data) {
         var id = data.GetHashCode () * 23;
         id <<= data.Priority;
         id += 29 * m_parent.Team;

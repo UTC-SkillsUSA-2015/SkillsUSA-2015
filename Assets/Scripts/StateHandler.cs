@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using State = AbstractHitbox.State;
 
-public class StateHandler : AbstractHitboxCommandParser<FighterHitbox> {
+public class StateHandler : AbstractHitboxCommandParser<AbstractAttackingHitbox> {
     #region Hiding
     const string kFormat = @"(?<=^|;|; )[Aa]pply (?:(?:[Aa]ttack (?<Attack>[\w_-]+))|(?:[Ss]tate (?<State>[\w_-]+))) to (?:(?:[Hh]itbox(?:es)? (?:(?:(?<Hitbox>[\w_-]+)(?:, )?)+|$))+|(?<All>all [Hh]itboxes);?)(?=$|;)";
     #endregion
