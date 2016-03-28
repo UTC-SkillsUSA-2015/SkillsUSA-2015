@@ -21,7 +21,7 @@ public class StateHandler : AbstractHitboxCommandParser<AbstractAttackingHitbox>
     }
 
     public void ParseStringWrapper(string command) {
-        Debug.Log ("Command");
+        ParseString (command);
     }
 
     public override void ParseString (string command) {
