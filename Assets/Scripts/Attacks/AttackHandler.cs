@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 /// <summary>
 /// Manages the activation of attacks through a Mecanim-friendly string-parsing interface.
 /// </summary>
-public class AttackHandler : AbstractHitboxCommandParser<FighterHitbox> {
-    
+[Obsolete("Though functional, AttackHandler is less generic and user-parseable than StateHandler")]
+public class AttackHandler : AbstractComponentCommandParser<FighterHitbox> {
 #if UNITY_EDITOR
     [SerializeField]
     bool debug;

@@ -4,15 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-public abstract class AbstractHitboxCommandParser<THitbox> : AbstractCommandParser
-    where THitbox : AbstractHitbox {
+public abstract class AbstractComponentCommandParser<TComponent> : AbstractCommandParser
+    where TComponent : Component {
 
-    protected IDictionary<string, THitbox> m_hitboxes = new Dictionary<string, THitbox> ();
+    protected IDictionary<string, TComponent> m_hitboxes = new Dictionary<string, TComponent> ();
     protected IDictionary<string, AttackData> m_attacks = new Dictionary<string, AttackData> ();
 
     string kRepeatedNameMessage {
         get {
-            return "{0} {1} has the same name as another {0} being passed to the AttackHandler on {2}";
+            return "{0} {1} has the same name as another {0} being passed to the " + this.GetType().Name + " on {2}";
         }
     }
 
@@ -31,8 +31,8 @@ public abstract class AbstractHitboxCommandParser<THitbox> : AbstractCommandPars
 
     // Use this for initialization
     protected void Start () {
-        IterateAndAdd (GetComponentsInChildren<THitbox> (), ref m_hitboxes, "Hitbox");
-        IterateAndAdd (kAttacks, ref m_attacks, "AttackData");
+        IterateAndAdd (GetComponentsInChildren<TComponent> (), ref m_hitboxes);
+        IterateAndAdd (kAttacks, ref m_attacks);
         DerivedStart ();
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractHitboxCommandParser<THitbox> : AbstractCommandPars
     /// </summary>
     protected virtual void DerivedStart () { }
 
-    void IterateAndAdd<T> (IEnumerable<T> items, ref IDictionary<string, T> dict, string type)
+    void IterateAndAdd<T> (IEnumerable<T> items, ref IDictionary<string, T> dict)
         where T : UnityEngine.Object {
         foreach (var obj in items) {
             var invalid = kInvalidNameCharacters.Match (obj.name);
@@ -52,16 +52,16 @@ public abstract class AbstractHitboxCommandParser<THitbox> : AbstractCommandPars
                 Debug.LogError (
                     string.Format (
                         kInvalidNameMessage,
-                        type,
+                        obj.GetType().Name,
                         obj.name,
-                        Regex.Unescape (invalid.Value) // Turn a newline into \n, etc
+                        invalid.Value
                         )
                     );
             else if (dict.ContainsKey (obj.name))
                 throw new Exception (
                     string.Format (
                         kRepeatedNameMessage,
-                        type,
+                        obj.GetType().Name,
                         obj.name,
                         gameObject.name
                         )
