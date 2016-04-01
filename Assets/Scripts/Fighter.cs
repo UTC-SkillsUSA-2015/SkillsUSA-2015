@@ -101,14 +101,14 @@ public class Fighter : MonoBehaviour {
             m_engine = GetComponent<Abstract2DPlatformEngine> ();
 #if UNITY_EDITOR
             if (!m_engine)
-                Debug.LogError (NoMovementEngineError);
+                UnityEngine.Debug.LogError (NoMovementEngineError);
 #endif
         }
         if (!m_anim) {
             m_anim = GetComponent<Animator> ();
 #if UNITY_EDITOR
             if (!m_anim)
-                Debug.LogError (NoAnimatorError);
+                UnityEngine.Debug.LogError (NoAnimatorError);
 #endif
         }
         m_health = (int) m_maxHealth;
@@ -139,7 +139,7 @@ public class Fighter : MonoBehaviour {
             Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
 #if UNITY_EDITOR
             if (debug) {
-                Debug.Log ("Scaler is " + scaler);
+                UnityEngine.Debug.Log ("Scaler is " + scaler);
             }
 #endif
             m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
@@ -154,7 +154,7 @@ public class Fighter : MonoBehaviour {
         #region Movement
         float h = 0;
         if (!Stunned) {
-            h = Input.GetAxisRaw (m_inputs.HorizontalAxis);
+            h = Input.GetAxisRaw(m_inputs.HorizontalAxis);
             m_engine.WalkMotion = h * MoveMultiplier (h);
             jump = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
             if (m_engine.Grounded && jump) {

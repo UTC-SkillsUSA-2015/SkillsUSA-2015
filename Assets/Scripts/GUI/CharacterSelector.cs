@@ -12,6 +12,7 @@ public enum selectionMode
 
 public class CharacterSelector : MonoBehaviour {
 
+    [SerializeField]
     selectionMode whichPlayerSelecting;
 
     [SerializeField]
@@ -26,14 +27,20 @@ public class CharacterSelector : MonoBehaviour {
     bool spawnPlayers = true;
 
     [SerializeField]
-    Button pOnereselect;
+    SceneManagment scene;
 
     [SerializeField]
-    Button startMatch;
+    GameObject selector;
+
+    [SerializeField]
+    GameObject startMatch;
+
+    [SerializeField]
+    MenuManagment menu;
 
     void Awake()
     {
-        DontDestroyOnLoad(transform.gameObject);
+        //DontDestroyOnLoad(transform.gameObject);
     }
 
     void Start()
@@ -58,17 +65,27 @@ public class CharacterSelector : MonoBehaviour {
                 spawnPlayers = false;
             }       
         }
-        if (SceneManager.GetActiveScene().name == "Character Select")
+
+        if (SceneManager.GetActiveScene().name == "CharacterSelect2.0")
         {
             if (whichPlayerSelecting != selectionMode.READYTOGO)
             {
-                startMatch.interactable = false;
-                pOnereselect.interactable = false;
+                startMatch.SetActive (false);
+                selector.SetActive(true);
             }
             else
             {
-                startMatch.interactable = true;
-                pOnereselect.interactable = true;
+                startMatch.SetActive (true);
+                selector.SetActive(false);
+                menu.SelectedOne = 0;
+                if (Input.GetButtonDown("AP1"))
+                {
+                    scene.LoadFightScene();
+                }
+                if (Input.GetButtonDown("XP1"))
+                {
+                    pOneSelect();
+                }
             }
         }
     }
@@ -87,7 +104,7 @@ public class CharacterSelector : MonoBehaviour {
         }
     }
 
-    public void CCSelect()
+    public void BubblesSelect()
     {
         if (whichPlayerSelecting == selectionMode.PONESELECTION)
         {
@@ -101,7 +118,7 @@ public class CharacterSelector : MonoBehaviour {
         }
     }
 
-    public void AASelect()
+    public void TyreseSelect()
     {
         if (whichPlayerSelecting == selectionMode.PONESELECTION)
         {

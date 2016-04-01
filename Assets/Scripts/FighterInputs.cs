@@ -4,13 +4,13 @@ using System.Collections;
 [CreateAssetMenu(fileName = "Fighter Controls", menuName = "Fighter Controls")]
 public class FighterInputs : ScriptableObject {
     [SerializeField]
-    public string HorizontalAxis = "Horizontal";
+    public string HorizontalAxis;
     [SerializeField]
-    public string Jump = "Jump";
+    public string Jump;
     [SerializeField]
-    public string LightAttack = "Light";
+    public string LightAttack;
     [SerializeField]
-    public string MediumAttack = "Medium";
+    public string MediumAttack;
     [SerializeField]
-    public string HeavyAttack = "Heavy";
+    public string HeavyAttack;
 }
