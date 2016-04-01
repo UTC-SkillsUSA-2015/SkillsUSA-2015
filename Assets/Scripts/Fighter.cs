@@ -85,6 +85,7 @@ public class Fighter : AbstractFighter {
     SoundGroup contactSounds;
 
     float movementInput;
+    float verticalInput;
 
     [SerializeField]
     public GameObject opponent;
@@ -150,9 +151,10 @@ public class Fighter : AbstractFighter {
 
     protected override void UpdateMovement () {
         if (!Stunned) {
-            movementInput = Input.GetAxisRaw (m_inputs.HorizontalAxis);
+            movementInput = m_inputs.HorizontalInput;
+            verticalInput = m_inputs.VerticalInput;
             m_engine.WalkMotion = movementInput * MoveMultiplier (movementInput);
-            jumpFlag = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
+            jumpFlag = (m_inputs.VerticalInput > 0) && m_engine.Grounded;
             if (m_engine.Grounded && jumpFlag) {
                 m_engine.Jump (jumpForce);
             }
@@ -164,11 +166,13 @@ public class Fighter : AbstractFighter {
         m_anim.SetBool ("Grounded", m_engine.Grounded);
         m_anim.SetBool ("MovingForward", MovingForward (movementInput));
         m_anim.SetBool ("MovingBackward", MovingBackward (movementInput));
-        if (Input.GetButtonDown (m_inputs.LightAttack))
+        m_anim.SetBool ("Crouch", verticalInput < 0);
+        m_anim.SetBool ("Jump", verticalInput > 0);
+        if (m_inputs.LightInput)
             m_anim.SetTrigger ("Light");
-        else if (Input.GetButtonDown (m_inputs.MediumAttack))
+        else if (m_inputs.MediumInput)
             m_anim.SetTrigger ("Medium");
-        else if (Input.GetButtonDown (m_inputs.HeavyAttack))
+        else if (m_inputs.HeavyInput)
             m_anim.SetTrigger ("Heavy");
     }
 
