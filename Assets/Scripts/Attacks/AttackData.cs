@@ -49,6 +49,12 @@ public class AttackData : ScriptableObject {
     /// </summary>
     [SerializeField]
     uint m_hitstun = 5;
+    /// <summary>
+    /// Optional sound that plays when the attack connects.
+    /// </summary>
+    [SerializeField]
+    [Tooltip("Optional")]
+    SoundGroup m_contactSounds;
     #endregion
     #region Properties
     public int Priority {
@@ -92,6 +98,12 @@ public class AttackData : ScriptableObject {
             return m_hitstun;
         }
     }
+
+    public SoundGroup ContactSounds {
+        get {
+            return m_contactSounds;
+        }
+    }
     #endregion
 
     public override int GetHashCode () {
@@ -101,6 +113,10 @@ public class AttackData : ScriptableObject {
         istof *= (m_priority * 67 + (int) (m_chip * 97570));
         istof += (int) (m_launch.magnitude * (100 * m_chip) * (m_launchState ? 1 : -1));
         istof *= 789 << (int) (m_chip * m_numberOfFrames * 10);
+        if (m_contactSounds)
+            istof += m_contactSounds.GetHashCode ();
+        else
+            istof += 23;
         return istof;
     }
 }
