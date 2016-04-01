@@ -30,11 +30,11 @@ public class HitManager : MonoBehaviour {
     public void AddAttack (Attack atk) {
 #if UNITY_EDITOR
         if (debug) {
-            Debug.Log ("Recieved attack " + atk.kData.name, gameObject);
+            UnityEngine.Debug.Log ("Recieved attack " + atk.kData.name, gameObject);
         }
 #endif
         if (!m_attackHistory.Contains (atk)) {
-            Debug.Log ("Used attack");
+            UnityEngine.Debug.Log ("Used attack");
             m_attackHistory.Enqueue (atk);
             m_currentAttacks.Enqueue (atk);
             if (m_attackHistory.Count > AttackRecordSize)
@@ -42,7 +42,7 @@ public class HitManager : MonoBehaviour {
         }
 #if UNITY_EDITOR
         else if (debug) {
-            Debug.Log ("Ignored attack");
+            UnityEngine.Debug.Log ("Ignored attack");
         }
 #endif
     }

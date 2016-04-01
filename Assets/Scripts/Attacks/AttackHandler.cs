@@ -84,7 +84,7 @@ public class AttackHandler : MonoBehaviour {
             }
             catch (KeyNotFoundException knfe) {
 #if UNITY_EDITOR
-                Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
+                UnityEngine.Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
                     dict + " dictionary", knfe));
                 if (debug) {
                     DebugKeys ("Hitboxes", m_hitboxes);
@@ -100,7 +100,7 @@ public class AttackHandler : MonoBehaviour {
         foreach (var str in dict.Keys) {
             temp += "'" + str + "'\n";
         }
-        Debug.Log (temp);
+        UnityEngine.Debug.Log (temp);
     }
 
     void IterateAndAdd<T> (IEnumerable<T> items, ref IDictionary<string, T> dict, string type)
