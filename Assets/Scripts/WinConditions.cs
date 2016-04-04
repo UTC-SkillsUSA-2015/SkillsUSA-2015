@@ -19,6 +19,24 @@ public class WinConditions : MonoBehaviour {
     [SerializeField]
     GameObject endCanvas;
 
+    [SerializeField]
+    GameObject fight;
+
+    [SerializeField]
+    GameObject P1Ready;
+
+    [SerializeField]
+    GameObject checks;
+
+    bool isP1Ready = false;
+
+    [SerializeField]
+    GameObject P2Ready;
+
+    bool isP2Ready = false;
+
+    bool flag = false;
+
     int winText = 0;
 
     float P1Health;
@@ -27,7 +45,9 @@ public class WinConditions : MonoBehaviour {
     [SerializeField]
     Timer timer;
 
-    float timeer;
+    float timerFloat;
+
+    public float enumeratorTimer;
 
     bool playerOneWins = false;
     bool playerTwoWins = false;
@@ -36,21 +56,53 @@ public class WinConditions : MonoBehaviour {
     public bool ended { get; private set; }
 
 	void Start () {
+        fight.SetActive(false);
+        P1Ready.SetActive(false);
+        P2Ready.SetActive(false);
         Time.timeScale = 0;
         endCanvas.SetActive(false);
         startCanvas.SetActive(true);
 	}
 	
 	void Update () {
-        timeer = timer.fseconds;
+        timerFloat = timer.fseconds;
         P1Health = (float)P1Script.CurrentHealth;
         P2Health = (float)P2Script.CurrentHealth;
 
+        if (!started)
+        {
+            if (Input.GetButtonDown("AP1"))
+            {
+                isP1Ready = true;
+            }
+
+            if (Input.GetButtonDown("AP2"))
+            {
+                isP2Ready = true;
+            }
+
+            if (isP1Ready)
+            {
+                P1Ready.SetActive(true);
+            }
+
+            if (isP2Ready)
+            {
+                P2Ready.SetActive(true);
+            }
+
+            if (isP1Ready && isP2Ready && !flag)
+            {
+                StartCoroutine("Hide");
+                flag = true;
+            }
+
+        }
+
         if (P1Health == 0 || P2Health == 0) {
-            Debug.Log ("WORK DAMMMIT!");
             CheckWinner ();
         }
-        else if (timeer == 0)
+        else if (timerFloat == 0)
             CheckWinner ();
     }
 
@@ -84,7 +136,47 @@ public class WinConditions : MonoBehaviour {
         Time.timeScale = 0;
     }
 
-    public void FIGHTEXCLAMATIONPOINT()
+    IEnumerator Hide()
+    {
+        enumeratorTimer = 0.2f;
+        while (true)
+        {
+            float pauseEndTime = Time.realtimeSinceStartup + 0.3f;
+            while (Time.realtimeSinceStartup < pauseEndTime)
+            {
+                yield return 0;
+            }
+            enumeratorTimer -= 0.1f;
+            if (enumeratorTimer <= 0)
+            {
+                fight.SetActive(true);
+                checks.SetActive(false);
+                StopCoroutine("Hide");
+                StartCoroutine("Counter");
+            }
+        }
+    }
+
+    IEnumerator Counter()
+    {
+        enumeratorTimer = 1;
+        while (true)
+        {
+            float pauseEndTime = Time.realtimeSinceStartup + 1f;
+            while (Time.realtimeSinceStartup < pauseEndTime)
+            {
+                yield return 0;
+            }
+            enumeratorTimer -= 1;
+            if (enumeratorTimer <= 0)
+            {
+                FIGHTEXCLAMATIONPOINT();
+                StopCoroutine("Counter");
+            }
+        }
+    }
+
+    void FIGHTEXCLAMATIONPOINT()
     {
         Time.timeScale = 1;
         startCanvas.SetActive(false);

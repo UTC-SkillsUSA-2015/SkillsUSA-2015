@@ -12,9 +12,7 @@ public class FightManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("AP1")) {
-            if (!winning.started)
-                winning.FIGHTEXCLAMATIONPOINT ();
-            else if (winning.ended)
+            if (winning.ended)
                 winning.restart ();
         }
 	}
