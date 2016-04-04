@@ -6,16 +6,12 @@ using System.Text.RegularExpressions;
 /// <summary>
 /// Manages the activation of attacks through a Mecanim-friendly string-parsing interface.
 /// </summary>
-public class AttackHandler : MonoBehaviour {
-    [SerializeField]
-    AttackData[] attacks;
+[Obsolete("Though functional, AttackHandler is less generic and user-parseable than StateHandler")]
+public class AttackHandler : AbstractComponentCommandParser<FighterHitbox> {
 #if UNITY_EDITOR
     [SerializeField]
     bool debug;
 #endif
-
-    IDictionary<string, FighterHitbox> m_hitboxes = new Dictionary<string, FighterHitbox> ();
-    IDictionary<string, AttackData> m_attacks = new Dictionary<string, AttackData> ();
 
     /// <summary>
     /// Translates into matching strings of the following format:
@@ -41,18 +37,18 @@ public class AttackHandler : MonoBehaviour {
     /// </summary>
     string RepeatedNameMessage {
         get {
-            return "{0} {1} has the same name as another {0} being passed to the HitManager on {2}";
+            return "{0} {1} has the same name as another {0} being passed to the AttackHandler on {2}";
         }
     }
 
-    string FailedCommandErrorMessage (string command) {
-        return "Invalid command string \"" + command + "\" passed to " + gameObject.name + "'s AttackHandler";
+    public override Regex kInvalidNameCharacters {
+        get {
+            return new Regex (@"[^\w_ ]");
+        }
     }
 
     // Use this for initialization
-    void Start () {
-        IterateAndAdd (GetComponentsInChildren<FighterHitbox> (), ref m_hitboxes, "Hitbox");
-        IterateAndAdd (attacks, ref m_attacks, "AttackData");
+    protected override void DerivedStart () {
 #if UNITY_EDITOR
         if (debug) {
             DebugKeys ("Hitboxes", m_hitboxes);
@@ -61,7 +57,7 @@ public class AttackHandler : MonoBehaviour {
 #endif
     }
 
-    public void ParseString (string command) {
+    public override void ParseString (string command) {
         if (!reggie.IsMatch (command)) {
             throw new Exception (FailedCommandErrorMessage (command));
         }
@@ -84,7 +80,7 @@ public class AttackHandler : MonoBehaviour {
             }
             catch (KeyNotFoundException knfe) {
 #if UNITY_EDITOR
-                UnityEngine.Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
+                Debug.LogException (new Exception ("Could not find key '" + key + "' in " +
                     dict + " dictionary", knfe));
                 if (debug) {
                     DebugKeys ("Hitboxes", m_hitboxes);
@@ -100,7 +96,7 @@ public class AttackHandler : MonoBehaviour {
         foreach (var str in dict.Keys) {
             temp += "'" + str + "'\n";
         }
-        UnityEngine.Debug.Log (temp);
+        Debug.Log (temp);
     }
 
     void IterateAndAdd<T> (IEnumerable<T> items, ref IDictionary<string, T> dict, string type)

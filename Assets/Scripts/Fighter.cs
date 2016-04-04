@@ -4,7 +4,7 @@
 /// The Fighter class is the wrapper which commands all other components
 /// to make the game object run.
 /// </summary>
-public class Fighter : MonoBehaviour {
+public class Fighter : AbstractFighter {
     enum Facing {
         Right, Left
     }
@@ -21,13 +21,14 @@ public class Fighter : MonoBehaviour {
     [SerializeField]
     Rigidbody2D m_rigid;
     [SerializeField]
-    AudioSource m_audio;
+    AudioSource m_voice;
     [SerializeField]
-    FighterSounds m_sounds;
+    [Tooltip("Optional")]
+    AudioSource m_contact;
+    [SerializeField]
+    FighterSoundset m_sounds;
     [SerializeField]
     HitManager m_hitManager;
-    //[SerializeField]
-    //FighterHealth m_health;
     [SerializeField]
     Abstract2DPlatformEngine m_engine;
     [SerializeField]
@@ -79,6 +80,12 @@ public class Fighter : MonoBehaviour {
     int stunTimer;
     int m_health;
 
+    bool hitFlag;
+    bool jumpFlag;
+    SoundGroup contactSounds;
+
+    float movementInput;
+
     [SerializeField]
     public GameObject opponent;
 
@@ -101,27 +108,21 @@ public class Fighter : MonoBehaviour {
             m_engine = GetComponent<Abstract2DPlatformEngine> ();
 #if UNITY_EDITOR
             if (!m_engine)
-                UnityEngine.Debug.LogError (NoMovementEngineError);
+                Debug.LogError (NoMovementEngineError);
 #endif
         }
         if (!m_anim) {
             m_anim = GetComponent<Animator> ();
 #if UNITY_EDITOR
             if (!m_anim)
-                UnityEngine.Debug.LogError (NoAnimatorError);
+                Debug.LogError (NoAnimatorError);
 #endif
         }
         m_health = (int) m_maxHealth;
     }
 
-    // Update is called every frame, if the MonoBehaviour is enabled
-    public void Update () {
-        #region Sound flags
-        bool jump = false;
-        bool hit = false;
-        #endregion
 
-        #region Rotation
+    protected override void UpdateFacing() {
         var rot = gameObject.transform.rotation;
         if (face == Facing.Right) {
             rot.y = 0;
@@ -130,66 +131,66 @@ public class Fighter : MonoBehaviour {
             rot.y = 180;
         }
         gameObject.transform.rotation = rot;
-        #endregion
+    }
 
-        #region Attacks
+    protected override void UpdateAttacks() {
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
             stunTimer = (int) atk.kData.Hitstun + 1;
             Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
-#if UNITY_EDITOR
-            if (debug) {
-                UnityEngine.Debug.Log ("Scaler is " + scaler);
-            }
-#endif
             m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
             if (atk.TotalDamage > 0) {
-                hit = true;
+                hitFlag = true;
                 m_health -= atk.TotalDamage;
             }
+            contactSounds = atk.kData.ContactSounds;
             m_healthbar.SetHealth ((float) m_health / m_maxHealth);
         }
-        #endregion
+    }
 
-        #region Movement
-        float h = 0;
+    protected override void UpdateMovement () {
         if (!Stunned) {
-            h = Input.GetAxisRaw(m_inputs.HorizontalAxis);
-            m_engine.WalkMotion = h * MoveMultiplier (h);
-            jump = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
-            if (m_engine.Grounded && jump) {
+            movementInput = Input.GetAxisRaw (m_inputs.HorizontalAxis);
+            m_engine.WalkMotion = movementInput * MoveMultiplier (movementInput);
+            jumpFlag = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
+            if (m_engine.Grounded && jumpFlag) {
                 m_engine.Jump (jumpForce);
             }
         }
-        #endregion
+    }
 
-        #region Animator
+    protected override void UpdateAnimator () {
         m_anim.SetBool ("Stunned", Stunned);
         m_anim.SetBool ("Grounded", m_engine.Grounded);
-        m_anim.SetBool ("MovingForward", MovingForward (h));
-        m_anim.SetBool ("MovingBackward", MovingBackward (h));
+        m_anim.SetBool ("MovingForward", MovingForward (movementInput));
+        m_anim.SetBool ("MovingBackward", MovingBackward (movementInput));
         if (Input.GetButtonDown (m_inputs.LightAttack))
             m_anim.SetTrigger ("Light");
         else if (Input.GetButtonDown (m_inputs.MediumAttack))
             m_anim.SetTrigger ("Medium");
         else if (Input.GetButtonDown (m_inputs.HeavyAttack))
             m_anim.SetTrigger ("Heavy");
-        #endregion
+    }
 
-        #region Audio
-        if (hit) {
-            m_audio.clip = m_sounds.randomHit;
-        }
-        else if (jump) {
-            m_audio.clip = m_sounds.randomJump;
+    protected override void UpdateAudio () {
+        if (hitFlag && contactSounds && m_contact) {
+            m_contact.clip = contactSounds.RandomClip;
+            m_contact.pitch = Random.Range (0.95f, 1.2f);
+            m_contact.Play();
         }
 
-        if (jump || hit) {
-            m_audio.pitch = Random.Range (0.95f, 1.2f);
-            m_audio.Play ();
-            /*the program won't compile unless this semicolon is here I DUNNO*/;
+        if (hitFlag) {
+            m_voice.clip = m_sounds.randomHit;
         }
-        #endregion
+        else if (jumpFlag) {
+            m_voice.clip = m_sounds.randomJump;
+        }
+        if (jumpFlag || hitFlag) {
+            m_voice.pitch = Random.Range (0.95f, 1.2f);
+            m_voice.Play ();
+        }
+        hitFlag = false;
+        jumpFlag = false;
     }
 
     public void LateUpdate () {
