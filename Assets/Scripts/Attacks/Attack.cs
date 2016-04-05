@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Attack {
     public class ConnectEventArgs : EventArgs {
-        bool Blocked;
+        public readonly bool kBlocked;
         public ConnectEventArgs(bool blocked = false) {
-            Blocked = blocked;
+            kBlocked = blocked;
         }
     }
     /// <summary>
@@ -35,7 +35,7 @@ public class Attack {
     /// Affects the launch vector with Vector2.Scale
     /// </summary>
     public Vector2 launchScale;
-    public event System.Action onConnect;
+    public event System.EventHandler<ConnectEventArgs> onConnect;
 
     public int TotalDamage {
         get {
@@ -57,8 +57,8 @@ public class Attack {
         launchScale = new Vector2 (xKnockbackMult, yKnockbackMult);
     }
 
-    public void Connect() {
-        onConnect ();
+    public void Connect(GameObject hit) {
+        onConnect (hit, new ConnectEventArgs(wasBlocked));
     }
 
     public static bool operator == (Attack left, Attack right) {

@@ -42,7 +42,7 @@ public class Fighter : AbstractFighter {
     [SerializeField]
     bool debug;
     #endregion
-
+    #region Readonly
     public int Team {
         get {
             return m_team;
@@ -63,7 +63,6 @@ public class Fighter : AbstractFighter {
             return m_health;
         }
     }
-
     Facing face {
         get {
             return (opponent.transform.position.x > gameObject.transform.position.x ?
@@ -71,6 +70,16 @@ public class Fighter : AbstractFighter {
                 Facing.Left);
         }
     }
+    #endregion
+    public bool CanJump {
+        get {
+            return m_canJump;
+        }
+        set {
+            m_canJump = value;
+        }
+    }
+
 
     bool Stunned {
         get {
@@ -80,6 +89,7 @@ public class Fighter : AbstractFighter {
     int stunTimer;
     int m_health;
 
+    bool m_canJump = true;
     bool hitFlag;
     bool jumpFlag;
     SoundGroup contactSounds;
@@ -121,7 +131,6 @@ public class Fighter : AbstractFighter {
         m_health = (int) m_maxHealth;
     }
 
-
     protected override void UpdateFacing() {
         var rot = gameObject.transform.rotation;
         if (face == Facing.Right) {
@@ -136,7 +145,13 @@ public class Fighter : AbstractFighter {
     protected override void UpdateAttacks() {
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
-            atk.Connect ();
+            // If the attack can be jump-cancelled after hitting:
+            // Add an on-connect call back to the attack that will
+            // return CanJump to true if the attack wasn't blocked
+            if (atk.kData.JumpCancelOnHit) {
+                atk.onConnect += (obj, args) => { if (!args.kBlocked) this.CanJump = true; };
+            }
+            atk.Connect (this.gameObject);
             stunTimer = (int) atk.kData.Hitstun + 1;
             Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
             m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
