@@ -136,6 +136,7 @@ public class Fighter : AbstractFighter {
     protected override void UpdateAttacks() {
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
+            atk.Connect ();
             stunTimer = (int) atk.kData.Hitstun + 1;
             Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
             m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
