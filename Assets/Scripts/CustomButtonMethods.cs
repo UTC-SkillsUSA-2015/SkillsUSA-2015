@@ -12,6 +12,18 @@ public class CustomButtonMethods : MonoBehaviour {
     [SerializeField]
     MenuManagment menuManag;
 
+    [SerializeField]
+    GameObject volumeControl;
+
+    [SerializeField]
+    Volume imSelec;
+
+    [SerializeField]
+    GameObject manag;
+
+    [SerializeField]
+    GameObject selectore;
+
     int whichMenu = 0;
 
     void Start()
@@ -62,5 +74,31 @@ public class CustomButtonMethods : MonoBehaviour {
 
         menus[whichMenu].SetActive(true);
         selectorManagers[whichMenu].SetActive(true);
+    }
+
+    void deactivateManager()
+    {
+        manag.SetActive(false);
+        selectore.SetActive(false);
+    }
+
+    void reactivateManager()
+    {
+        manag.SetActive(true);
+        selectore.SetActive(true);
+    }
+
+    public void SelectVolume()
+    {
+        volumeControl.SetActive (true);
+        imSelec.imSelected = true;
+        deactivateManager();
+    }
+
+    public void DeselectVolume()
+    {
+        volumeControl.SetActive(false);
+        imSelec.imSelected = false;
+        reactivateManager();
     }
 }

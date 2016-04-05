@@ -21,6 +21,9 @@ public class MenuManagment : MonoBehaviour {
     [SerializeField]
     float lerpTime;
 
+    [SerializeField]
+    float selectorSize = 10;
+
     float currentLerpTime;
 
     float holdTime = 0.4f;
@@ -28,11 +31,32 @@ public class MenuManagment : MonoBehaviour {
 
     public bool pressed = false;
 
+    public bool lerpSelectorScale = true;
+
     public int SelectedOne = 0;
+    
+    public Vector2 oldselecSize;
+
+    public Vector2 newselectSize;
 
     void Start()
     {
-        selector.transform.position = buttons[SelectedOne].transform.position;
+        if (lerpSelectorScale)
+        {
+            selector.transform.position = buttons[SelectedOne].transform.position;
+            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            changeSelectorSize();
+        }
+    }
+
+    void OnEnable()
+    {
+        if (lerpSelectorScale)
+        {
+            selector.transform.position = buttons[SelectedOne].transform.position;
+            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            changeSelectorSize();
+        }
     }
 
     void Update()
@@ -43,6 +67,8 @@ public class MenuManagment : MonoBehaviour {
         bool keyPressed = false;
         pressed = keyPressed;
 
+        
+
         if (currentLerpTime > lerpTime)
         {
             currentLerpTime = lerpTime;
@@ -52,6 +78,8 @@ public class MenuManagment : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.S) || held >= holdTime)
         {
+            if (lerpSelectorScale)
+                oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             SelectedOne++;
             currentLerpTime = 0;
             held = 0;
@@ -64,6 +92,8 @@ public class MenuManagment : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.W) || held <= -holdTime)
         {
+            if (lerpSelectorScale)
+                oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             SelectedOne--;
             currentLerpTime = 0;
             held = 0;
@@ -79,11 +109,11 @@ public class MenuManagment : MonoBehaviour {
             buttonCall[SelectedOne].selectButton();
         }
 
-        if (Input.GetKey(KeyCode.W) || Input.GetAxis("DPadYP1") == 1f || Input.GetAxis("LeftJoyYP1") == 1f)
+        if (Input.GetKey(KeyCode.W) || Input.GetAxis("DPadYP1") == 1f)
         {
             held = held - Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetAxis("DPadYP1") == -1f || Input.GetAxis("LeftJoyYP1") == -1f)
+        else if (Input.GetKey(KeyCode.S) || Input.GetAxis("DPadYP1") == -1f)
         {
             held = held + Time.deltaTime;
         }
@@ -93,22 +123,25 @@ public class MenuManagment : MonoBehaviour {
         }
 
         float perc = currentLerpTime / lerpTime;
+        float percTwo = currentLerpTime / 0.1f;
         selector.transform.position = Vector3.Lerp(selector.transform.position, buttons[SelectedOne].transform.position, perc);
+        if (lerpSelectorScale)
+            selector.rectTransform.sizeDelta = Vector2.Lerp(oldselecSize, newselectSize, percTwo);
     }
 
     void PadControll()
     {
-        if(Input.GetAxis("DPadYP1") == 0.0 || Input.GetAxis("LeftJoyYP1") == 0.0)
+        if(Input.GetAxis("DPadYP1") == 0.0)
         {
             control = Dpad.None;
             flag = true;
         }
 
-        if (Input.GetAxis("DPadYP1") == 1f && flag || Input.GetAxis("LeftJoyYP1") == 1f && flag)
+        if (Input.GetAxis("DPadYP1") == 1f && flag)
         {
             StartCoroutine("DpadControl", Dpad.Up);
         }
-        if (Input.GetAxis("DPadYP1") == -1f && flag || Input.GetAxis("LeftJoyYP1") == -1f && flag)
+        if (Input.GetAxis("DPadYP1") == -1f && flag)
         {
             StartCoroutine("DpadControl", Dpad.Down);
 
@@ -127,6 +160,8 @@ public class MenuManagment : MonoBehaviour {
 
     void DPadUp()
     {
+        if (lerpSelectorScale)
+            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
         SelectedOne--;
         currentLerpTime = 0;
         held = 0;
@@ -135,6 +170,8 @@ public class MenuManagment : MonoBehaviour {
 
     void DPadDown()
     {
+        if (lerpSelectorScale)
+            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
         SelectedOne++;
         currentLerpTime = 0;
         held = 0;
@@ -151,5 +188,12 @@ public class MenuManagment : MonoBehaviour {
         {
             SelectedOne = buttons.Length - 1;
         }
+        if (lerpSelectorScale)
+            changeSelectorSize();
+    }
+
+    void changeSelectorSize()
+    {
+        newselectSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + 15, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
     }
 }
