@@ -1,0 +1,120 @@
+fileFormatVersion: 2
+guid: e1d28d2d4e0572f46a93076e4749e8ff
+timeCreated: 1459958920
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: cythe_0
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: cythe_0
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 72
+        width: 1883
+        height: 696
+      alignment: 9
+      pivot: {x: 0.48794332, y: 0.18313141}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 912.4682, y: -106.69595}
+        - {x: 915.4682, y: -106.69595}
+        - {x: 915.4682, y: -90.69595}
+        - {x: 905.4682, y: -52.695953}
+        - {x: 893.4682, y: -16.695953}
+        - {x: 907.4682, y: -19.695953}
+        - {x: 910.4682, y: 19.304047}
+        - {x: 905.4682, y: 19.304047}
+        - {x: 883.4682, y: 37.304047}
+        - {x: 883.4682, y: 52.304047}
+        - {x: 879.4682, y: 111.30405}
+        - {x: 868.4682, y: 170.30405}
+        - {x: 855.4682, y: 239.30405}
+        - {x: 832.4682, y: 299.30405}
+        - {x: 821.4682, y: 324.30405}
+        - {x: 773.4682, y: 393.30405}
+        - {x: 758.4682, y: 412.30405}
+        - {x: 715.4682, y: 464.30405}
+        - {x: 701.4682, y: 478.30405}
+        - {x: 664.4682, y: 499.30405}
+        - {x: 593.4682, y: 539.3041}
+        - {x: 582.4682, y: 539.3041}
+        - {x: 582.4682, y: 537.3041}
+        - {x: 595.4682, y: 520.3041}
+        - {x: 644.4682, y: 455.30405}
+        - {x: 665.4682, y: 415.30405}
+        - {x: 688.4682, y: 376.30405}
+        - {x: 690.4682, y: 361.30405}
+        - {x: 707.4682, y: 298.30405}
+        - {x: 721.4682, y: 249.30405}
+        - {x: 723.4682, y: 241.30405}
+        - {x: 732.4682, y: 116.30405}
+        - {x: 718.4682, y: 25.304047}
+        - {x: 718.4682, y: 19.304047}
+        - {x: -869.5318, y: 19.304047}
+        - {x: -870.5318, y: 18.304047}
+        - {x: -870.5318, y: -15.695953}
+        - {x: -869.5318, y: -16.695953}
+        - {x: 712.4682, y: -16.695953}
+        - {x: 700.4682, y: -85.69595}
+        - {x: 697.4682, y: -114.69595}
+        - {x: 700.4682, y: -116.69595}
+        - {x: 766.4682, y: -36.695953}
+        - {x: 768.4682, y: -40.695953}
+        - {x: 775.4682, y: -51.695953}
+        - {x: 815.4682, y: -106.69595}
+        - {x: 826.4682, y: -120.69595}
+        - {x: 832.4682, y: -120.69595}
+        - {x: 834.4682, y: -115.69595}
+        - {x: 844.4682, y: -36.695953}
+        - {x: 857.4682, y: -51.695953}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
