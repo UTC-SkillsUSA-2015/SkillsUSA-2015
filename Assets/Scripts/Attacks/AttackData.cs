@@ -11,6 +11,9 @@ public class AttackData : ScriptableObject {
     // Properties are accessed by other scripts, making the values in the
     // object unmodifiable.
     #region Fields
+#pragma warning disable CS0649
+    // Above: Makes the build process ignore the "never assigned to" warning
+    // that turns up
     /// <summary>
     /// The priority of the attack. Higher priorities will cancel out lower
     /// priorities. Equal priorities will cancel out each other.
@@ -55,6 +58,13 @@ public class AttackData : ScriptableObject {
     [SerializeField]
     [Tooltip("Optional")]
     SoundGroup m_contactSounds;
+    /// <summary>
+    /// Determines whether the player is allowed to jump mid-attack so long as the attack
+    /// has connected
+    /// </summary>
+    [SerializeField]
+    bool m_jumpCancelOnHit = false;
+#pragma warning restore CS0649
     #endregion
     #region Properties
     public int Priority {
@@ -102,6 +112,12 @@ public class AttackData : ScriptableObject {
     public SoundGroup ContactSounds {
         get {
             return m_contactSounds;
+        }
+    }
+
+    public bool JumpCancelOnHit {
+        get {
+            return m_jumpCancelOnHit;
         }
     }
     #endregion

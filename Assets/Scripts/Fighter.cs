@@ -23,7 +23,7 @@ public class Fighter : AbstractFighter {
     [SerializeField]
     AudioSource m_voice;
     [SerializeField]
-    [Tooltip("Optional")]
+    [Tooltip ("Optional")]
     AudioSource m_contact;
     [SerializeField]
     FighterSoundset m_sounds;
@@ -42,7 +42,7 @@ public class Fighter : AbstractFighter {
     [SerializeField]
     bool debug;
     #endregion
-
+    #region Readonly
     public int Team {
         get {
             return m_team;
@@ -63,7 +63,6 @@ public class Fighter : AbstractFighter {
             return m_health;
         }
     }
-
     Facing face {
         get {
             return (opponent.transform.position.x > gameObject.transform.position.x ?
@@ -71,8 +70,31 @@ public class Fighter : AbstractFighter {
                 Facing.Left);
         }
     }
+    #endregion
+    public bool SoftStun {
+        get {
+            return m_softStun;
+        }
+        set {
+            m_softStun = value;
+        }
+    }
 
-    bool Stunned {
+    public bool CanMove {
+        get {
+            return !(SoftStun || HardStun);
+        }
+    }
+    /// <summary>
+    /// Animator-friendly wrapper for the CanJump setter.
+    /// Will set true for any positive value; false for 0 or negative.
+    /// </summary>
+    /// <param name="value">The value to set</param>
+    public void SetSoftStun (int value) {
+        SoftStun = (value > 0);
+    }
+
+    bool HardStun {
         get {
             return stunTimer > 0;
         }
@@ -80,6 +102,7 @@ public class Fighter : AbstractFighter {
     int stunTimer;
     int m_health;
 
+    bool m_softStun = true;
     bool hitFlag;
     bool jumpFlag;
     SoundGroup contactSounds;
@@ -121,8 +144,7 @@ public class Fighter : AbstractFighter {
         m_health = (int) m_maxHealth;
     }
 
-
-    protected override void UpdateFacing() {
+    protected override void UpdateFacing () {
         var rot = gameObject.transform.rotation;
         if (face == Facing.Right) {
             rot.y = 0;
@@ -133,9 +155,16 @@ public class Fighter : AbstractFighter {
         gameObject.transform.rotation = rot;
     }
 
-    protected override void UpdateAttacks() {
+    protected override void UpdateAttacks () {
         while (m_hitManager.HasAttack) {
             var atk = m_hitManager.PullAttack;
+            // If the attack can be jump-cancelled after hitting:
+            // Add an on-connect call back to the attack that will
+            // return CanJump to true if the attack wasn't blocked
+            if (atk.kData.JumpCancelOnHit) {
+                atk.onConnect += (obj, args) => { if (!args.kBlocked) this.SoftStun = true; };
+            }
+            atk.Connect (this.gameObject);
             stunTimer = (int) atk.kData.Hitstun + 1;
             Vector2 scaler = Vector2.up + (face == Facing.Right ? Vector2.right : Vector2.left);
             m_rigid.velocity = Vector2.Scale (atk.TotalLaunch, scaler);
@@ -149,7 +178,7 @@ public class Fighter : AbstractFighter {
     }
 
     protected override void UpdateMovement () {
-        if (!Stunned) {
+        if (CanMove) {
             movementInput = Input.GetAxisRaw (m_inputs.HorizontalAxis);
             m_engine.WalkMotion = movementInput * MoveMultiplier (movementInput);
             jumpFlag = Input.GetButtonDown (m_inputs.Jump) && m_engine.Grounded;
@@ -160,23 +189,26 @@ public class Fighter : AbstractFighter {
     }
 
     protected override void UpdateAnimator () {
-        m_anim.SetBool ("Stunned", Stunned);
+        m_anim.SetBool ("Stunned", HardStun);
         m_anim.SetBool ("Grounded", m_engine.Grounded);
         m_anim.SetBool ("MovingForward", MovingForward (movementInput));
         m_anim.SetBool ("MovingBackward", MovingBackward (movementInput));
-        if (Input.GetButtonDown (m_inputs.LightAttack))
-            m_anim.SetTrigger ("Light");
-        else if (Input.GetButtonDown (m_inputs.MediumAttack))
-            m_anim.SetTrigger ("Medium");
-        else if (Input.GetButtonDown (m_inputs.HeavyAttack))
-            m_anim.SetTrigger ("Heavy");
+        if (Input.GetButtonDown (m_inputs.LightAttack)) {
+            m_anim.SetBool ("Light", true);
+        }
+        else if (Input.GetButtonDown (m_inputs.MediumAttack)) {
+            m_anim.SetBool ("Medium", true);
+        }
+        else if (Input.GetButtonDown (m_inputs.HeavyAttack)) {
+            m_anim.SetBool ("Heavy", true);
+        }
     }
 
     protected override void UpdateAudio () {
         if (hitFlag && contactSounds && m_contact) {
             m_contact.clip = contactSounds.RandomClip;
             m_contact.pitch = Random.Range (0.95f, 1.2f);
-            m_contact.Play();
+            m_contact.Play ();
         }
 
         if (hitFlag) {
@@ -197,6 +229,9 @@ public class Fighter : AbstractFighter {
         if (stunTimer > 0) {
             stunTimer--;
         }
+        m_anim.SetBool ("Light", false);
+        m_anim.SetBool ("Medium", false);
+        m_anim.SetBool ("Heavy", false);
     }
 
     float MoveMultiplier (float direction) {
