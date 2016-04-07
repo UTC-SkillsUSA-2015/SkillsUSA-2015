@@ -58,7 +58,7 @@ public class Attack {
     }
 
     public void Connect(GameObject hit) {
-        onConnect (hit, new ConnectEventArgs(wasBlocked));
+        if (onConnect != null) onConnect (hit, new ConnectEventArgs(wasBlocked));
     }
 
     public static bool operator == (Attack left, Attack right) {
