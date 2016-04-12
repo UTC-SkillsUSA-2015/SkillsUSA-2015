@@ -28,12 +28,19 @@ public class CustomButtonMethods : MonoBehaviour {
     [SerializeField]
     Toggle fullscreen;
 
+    [SerializeField]
+    Toggle runInBackground;
+
     int whichMenu = 0;
 
     bool fullscreenMode;
 
+    bool runInBackgroundMode;
+
     void Start()
     {
+        runInBackgroundMode = Application.runInBackground;
+        runInBackground.isOn = runInBackgroundMode;
         fullscreenMode = Screen.fullScreen;
         fullscreen.isOn = fullscreenMode;
         changeMenu();
@@ -116,8 +123,11 @@ public class CustomButtonMethods : MonoBehaviour {
         fullscreen.isOn = fullscreenMode;
         Screen.fullScreen = fullscreenMode;
     }
-    void BOOP()
+
+    public void toggleRunInBackground()
     {
-        this.transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z);
+        runInBackgroundMode = !runInBackgroundMode;
+        runInBackground.isOn = runInBackgroundMode;
+        Application.runInBackground = runInBackgroundMode;
     }
 }
