@@ -44,7 +44,7 @@ public class MenuManagment : MonoBehaviour {
         if (lerpSelectorScale)
         {
             selector.transform.position = buttons[SelectedOne].transform.position;
-            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             changeSelectorSize();
         }
     }
@@ -54,7 +54,7 @@ public class MenuManagment : MonoBehaviour {
         if (lerpSelectorScale)
         {
             selector.transform.position = buttons[SelectedOne].transform.position;
-            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             changeSelectorSize();
         }
     }
@@ -79,7 +79,7 @@ public class MenuManagment : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.S) || held >= holdTime)
         {
             if (lerpSelectorScale)
-                oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+                oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             SelectedOne++;
             currentLerpTime = 0;
             held = 0;
@@ -93,7 +93,7 @@ public class MenuManagment : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.W) || held <= -holdTime)
         {
             if (lerpSelectorScale)
-                oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+                oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
             SelectedOne--;
             currentLerpTime = 0;
             held = 0;
@@ -161,7 +161,7 @@ public class MenuManagment : MonoBehaviour {
     void DPadUp()
     {
         if (lerpSelectorScale)
-            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
         SelectedOne--;
         currentLerpTime = 0;
         held = 0;
@@ -171,7 +171,7 @@ public class MenuManagment : MonoBehaviour {
     void DPadDown()
     {
         if (lerpSelectorScale)
-            oldselecSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+            oldselecSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + selectorSize, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
         SelectedOne++;
         currentLerpTime = 0;
         held = 0;
@@ -194,6 +194,6 @@ public class MenuManagment : MonoBehaviour {
 
     void changeSelectorSize()
     {
-        newselectSize = new Vector2(buttonCall[SelectedOne].GetComponent<RectTransform>().rect.width + 15, buttonCall[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
+        newselectSize = new Vector2(buttons[SelectedOne].GetComponent<RectTransform>().rect.width + 15, buttons[SelectedOne].GetComponent<RectTransform>().rect.height + 10);
     }
 }

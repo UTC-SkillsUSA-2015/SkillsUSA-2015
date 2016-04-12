@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class CustomButtonMethods : MonoBehaviour {
 
@@ -24,10 +25,17 @@ public class CustomButtonMethods : MonoBehaviour {
     [SerializeField]
     GameObject selectore;
 
+    [SerializeField]
+    Toggle fullscreen;
+
     int whichMenu = 0;
+
+    bool fullscreenMode;
 
     void Start()
     {
+        fullscreenMode = Screen.fullScreen;
+        fullscreen.isOn = fullscreenMode;
         changeMenu();
     }
 
@@ -100,5 +108,16 @@ public class CustomButtonMethods : MonoBehaviour {
         volumeControl.SetActive(false);
         imSelec.imSelected = false;
         reactivateManager();
+    }
+
+    public void toggleFullscreen()
+    {
+        fullscreenMode = !fullscreenMode;
+        fullscreen.isOn = fullscreenMode;
+        Screen.fullScreen = fullscreenMode;
+    }
+    void BOOP()
+    {
+        this.transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z);
     }
 }
