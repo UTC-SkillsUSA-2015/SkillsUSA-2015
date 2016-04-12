@@ -99,19 +99,15 @@ public class FighterHitbox : AbstractAttackingHitbox {
     /// </summary>
     /// <param name="collision">The collider that entered</param>
     public void OnTriggerEnter2D (Collider2D collision) {
-#if UNITY_EDITOR
         if (debug) {
             Debug.Log (collision.name + " intersected " + gameObject.name);
         }
-#endif
         var otherHitbox = collision.GetComponent<AbstractHitbox> ();
         if (otherHitbox /* ... is not null */ && otherHitbox.transform.root != transform.root) {
             m_intersecting.Add (otherHitbox);
-#if UNITY_EDITOR
             if (debug) {
                 Debug.Log (collision.name + " added to " + gameObject.name + "'s intersecting hitboxes");
             }
-#endif
         }
     }
 
@@ -120,11 +116,9 @@ public class FighterHitbox : AbstractAttackingHitbox {
     /// </summary>
     /// <param name="collision">The collider that left</param>
     public void OnTriggerExit2D (Collider2D collision) {
-#if UNITY_EDITOR
         if (debug) {
             Debug.Log (collision.name + " removed from " + gameObject.name + "'s intersecting hitboxes");
         }
-#endif
         m_intersecting.Remove (collision.GetComponent<AbstractHitbox> ());
     }
 
@@ -134,29 +128,18 @@ public class FighterHitbox : AbstractAttackingHitbox {
     /// </summary>
     /// <param name="attack">The attack this hitbox is being hit with.</param>
     public override void Hit (Attack attack) {
-#if UNITY_EDITOR
         if (debug) {
             Debug.Log (gameObject.name + " has been hit by " + attack.kData.name);
         }
-#endif
         switch (state) {
             case State.Normal:
-#if UNITY_EDITOR
-                if (debug) {
-                    Debug.Log ("Adding attack to hitmanager", gameObject);
-                }
-#endif
                 m_hitManager.AddAttack (attack);
                 break;
             case State.Block:
-#if UNITY_EDITOR
-                if (debug) {
-                    Debug.Log ("Blocked");
-                }
-#endif
                 attack.damageMultiplier *= attack.kData.Chip;
                 attack.launchScale.x = blockingLaunchScale;
                 attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
+                attack.wasBlocked = true;
                 goto case State.Normal;
             case State.Attack:
                 if (attack.kData.Priority > m_attack.Priority) goto case State.Normal;
