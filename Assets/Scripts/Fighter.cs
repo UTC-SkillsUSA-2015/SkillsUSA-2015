@@ -194,7 +194,7 @@ public class Fighter : AbstractFighter {
         var fwd = MovingForward (movementInput);
         var bck = MovingBackward (movementInput);
 
-        Debug.Log (fwd ? "Moving forward" : (bck ? "Moving Backward" : "Not Moving"));
+        //Debug.Log (fwd ? "Moving forward" : (bck ? "Moving Backward" : "Not Moving"));
 
         m_anim.SetBool ("Stunned", HardStun);
         m_anim.SetBool ("Grounded", m_engine.Grounded);
@@ -256,8 +256,8 @@ public class Fighter : AbstractFighter {
     }
 
     bool MovingForward (float movement) {
-        Debug.Log ("Movement: " + movement);
-        Debug.Log ("Movement is " + (movement > 0 ? "Positive" : (movement < 0 ? "Negative" : "0")));
+        //Debug.Log ("Movement: " + movement);
+        //Debug.Log ("Movement is " + (movement > 0 ? "Positive" : (movement < 0 ? "Negative" : "0")));
         return (movement > 0 && face == Facing.Right) || (movement < 0 && face == Facing.Left);
     }
 
