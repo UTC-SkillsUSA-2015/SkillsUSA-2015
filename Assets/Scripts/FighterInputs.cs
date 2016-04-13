@@ -39,6 +39,7 @@ public class FighterInputs : ScriptableObject {
         var i = 0f;
         foreach (var axis in axes) {
             i = Input.GetAxisRaw (axis);
+            Debug.Log ("Axis " + axis + " returned " + i);
             if (i != 0)
                 break;
         }
