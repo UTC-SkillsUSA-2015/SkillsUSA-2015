@@ -191,10 +191,15 @@ public class Fighter : AbstractFighter {
     }
 
     protected override void UpdateAnimator () {
+        var fwd = MovingForward (movementInput);
+        var bck = MovingBackward (movementInput);
+
+        //Debug.Log (fwd ? "Moving forward" : (bck ? "Moving Backward" : "Not Moving"));
+
         m_anim.SetBool ("Stunned", HardStun);
         m_anim.SetBool ("Grounded", m_engine.Grounded);
-        m_anim.SetBool ("MovingForward", MovingForward (movementInput));
-        m_anim.SetBool ("MovingBackward", MovingBackward (movementInput));
+        m_anim.SetBool ("MovingForward", fwd);
+        m_anim.SetBool ("MovingBackward", bck);
         m_anim.SetBool ("Crouch", verticalInput < 0);
         m_anim.SetBool ("Jump", verticalInput > 0);
         if (m_inputs.LightInput) {
@@ -251,6 +256,8 @@ public class Fighter : AbstractFighter {
     }
 
     bool MovingForward (float movement) {
+        //Debug.Log ("Movement: " + movement);
+        //Debug.Log ("Movement is " + (movement > 0 ? "Positive" : (movement < 0 ? "Negative" : "0")));
         return (movement > 0 && face == Facing.Right) || (movement < 0 && face == Facing.Left);
     }
 
