@@ -53,6 +53,13 @@ public class CustomButtonMethods : MonoBehaviour {
         changeMenu();
     }
 
+    public void Credits()
+    {
+        whichMenu = 2;
+        menuManag.SelectedOne = 0;
+        changeMenu();
+    }
+
     public void ReturnToMenu()
     {
         whichMenu = 0;
