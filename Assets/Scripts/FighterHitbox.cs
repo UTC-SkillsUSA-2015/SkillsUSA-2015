@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class FighterHitbox : AbstractHitbox {
-    public enum HitboxState {
-        Normal,
-        Block,
-        Attack
-    }
-
+public class FighterHitbox : AbstractAttackingHitbox {
     #region Error messages
     string NoColliderError {
         get {
@@ -27,8 +21,12 @@ public class FighterHitbox : AbstractHitbox {
     }
     #endregion
 
-    [SerializeField]
-    HitboxState m_state;
+    protected override int Team {
+        get {
+            return m_parent.Team;
+        }
+    }
+
     /// <summary>
     /// Optional field. If not specified, will attempt to pull from the root GameObject
     /// </summary>
@@ -52,19 +50,9 @@ public class FighterHitbox : AbstractHitbox {
 
     // Use this for initialization
     void Start () {
-#if UNITY_EDITOR
         if (!GetComponent<Collider2D> ()) {
             Debug.LogError (NoColliderError);
         }
-#endif
-//        if (!m_rigidbody) {
-//            m_rigidbody = gameObject.transform.root.GetComponent<Rigidbody2D> ();
-//#if UNITY_EDITOR
-//            if (!m_rigidbody) {
-//                Debug.LogError (NoRigidbodyError);
-//            }
-//#endif
-//        }
     }
 
     public void Update () {
@@ -92,10 +80,10 @@ public class FighterHitbox : AbstractHitbox {
     /// Called by the Animator when an attack's hit frames begin.
     /// </summary>
     /// <param name="attack">The data of the attack.</param>
-    public void Attack (AttackData attack) {
+    public override void Attack (AttackData attack) {
         m_attack = attack;
         m_frameTimer = (int) attack.NumberOfFrames;
-        m_state = HitboxState.Attack;
+        state = State.Attack;
     }
 
     /// <summary>
@@ -103,27 +91,23 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     void CancelAttack () {
         m_attack = null;
-        m_state = HitboxState.Normal;
+        state = State.Normal;
     }
 
     /// <summary>
     /// Adds a hitbox to the internal hitbox list
     /// </summary>
     /// <param name="collision">The collider that entered</param>
-    public override void OnTriggerEnter2D (Collider2D collision) {
-#if UNITY_EDITOR
+    public void OnTriggerEnter2D (Collider2D collision) {
         if (debug) {
             Debug.Log (collision.name + " intersected " + gameObject.name);
         }
-#endif
         var otherHitbox = collision.GetComponent<AbstractHitbox> ();
         if (otherHitbox /* ... is not null */ && otherHitbox.transform.root != transform.root) {
             m_intersecting.Add (otherHitbox);
-#if UNITY_EDITOR
             if (debug) {
                 Debug.Log (collision.name + " added to " + gameObject.name + "'s intersecting hitboxes");
             }
-#endif
         }
     }
 
@@ -132,11 +116,9 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="collision">The collider that left</param>
     public void OnTriggerExit2D (Collider2D collision) {
-#if UNITY_EDITOR
         if (debug) {
             Debug.Log (collision.name + " removed from " + gameObject.name + "'s intersecting hitboxes");
         }
-#endif
         m_intersecting.Remove (collision.GetComponent<AbstractHitbox> ());
     }
 
@@ -146,58 +128,38 @@ public class FighterHitbox : AbstractHitbox {
     /// </summary>
     /// <param name="attack">The attack this hitbox is being hit with.</param>
     public override void Hit (Attack attack) {
-#if UNITY_EDITOR
         if (debug) {
             Debug.Log (gameObject.name + " has been hit by " + attack.kData.name);
         }
-#endif
-        switch (m_state) {
-            case HitboxState.Normal:
-#if UNITY_EDITOR
-                if (debug) {
-                    Debug.Log ("Adding attack to hitmanager", gameObject);
-                }
-#endif
+        switch (state) {
+            case State.Normal:
                 m_hitManager.AddAttack (attack);
                 break;
-            case HitboxState.Block:
-#if UNITY_EDITOR
-                if (debug) {
-                    Debug.Log ("Blocked");
-                }
-#endif
+            case State.Block:
                 attack.damageMultiplier *= attack.kData.Chip;
                 attack.launchScale.x = blockingLaunchScale;
                 attack.launchScale.y = (m_parent.Grounded ? 0 : blockingLaunchScale);
-                goto case HitboxState.Normal;
-            case HitboxState.Attack:
-                if (attack.kData.Priority > m_attack.Priority) goto case HitboxState.Normal;
+                attack.wasBlocked = true;
+                goto case State.Normal;
+            case State.Attack:
+                if (attack.kData.Priority > m_attack.Priority) goto case State.Normal;
                 else if (attack.kData.Priority == m_attack.Priority)
                     m_hitManager.AddAttack (GenerateAttack(m_conflcitResolution));
                 break;
             default:
                 Debug.LogError (InvalidStateSelectionError);
-                goto case HitboxState.Normal;
+                goto case State.Normal;
         }
     }
 
-    /// <summary>
-    /// Utility method to quickly create an attack from some data.
-    /// </summary>
-    /// <param name="data">The AttackData to create an attack for.</param>
-    /// <returns>An Attack using the given data.</returns>
-    private Attack GenerateAttack (AttackData data, float damageMult = 1.00f,
-        float xKnockbackMult = 1.00f, float yKnockbackMult = 1.00f) {
-        return new Attack (data, m_parent.Team, GenerateID (data),
-            damageMult, xKnockbackMult, yKnockbackMult);
-    }
+    
 
     /// <summary>
     /// Utility method to generate attack IDs.
     /// </summary>
     /// <param name="data">The data to create an id for.</param>
     /// <returns>An entirely unique id for the data.</returns>
-    private int GenerateID (AttackData data) {
+    protected override int GenerateID (AttackData data) {
         var id = data.GetHashCode () * 23;
         id <<= data.Priority;
         id += 29 * m_parent.Team;

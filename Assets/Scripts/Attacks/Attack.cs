@@ -1,7 +1,14 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Attack {
+    public class ConnectEventArgs : EventArgs {
+        public readonly bool kBlocked;
+        public ConnectEventArgs(bool blocked = false) {
+            kBlocked = blocked;
+        }
+    }
     /// <summary>
     /// The properties of the attack.
     /// </summary>
@@ -21,9 +28,14 @@ public class Attack {
     /// </summary>
     public float damageMultiplier;
     /// <summary>
+    /// Whether the attack has been blocked or not.
+    /// </summary>
+    public bool wasBlocked = false;
+    /// <summary>
     /// Affects the launch vector with Vector2.Scale
     /// </summary>
     public Vector2 launchScale;
+    public event System.EventHandler<ConnectEventArgs> onConnect;
 
     public int TotalDamage {
         get {
@@ -43,6 +55,10 @@ public class Attack {
         kId = id;
         damageMultiplier = damageMult;
         launchScale = new Vector2 (xKnockbackMult, yKnockbackMult);
+    }
+
+    public void Connect(GameObject hit) {
+        if (onConnect != null) onConnect (hit, new ConnectEventArgs(wasBlocked));
     }
 
     public static bool operator == (Attack left, Attack right) {
