@@ -18,6 +18,15 @@ public class ColliderToggle : MonoBehaviour {
         ChangeBool();
     }
 
+    void Update()
+    {
+        if (Input.GetButtonDown("BackButton"))
+        {
+            colliderviewState.isOn = !colliderviewState.isOn;
+            ChangeBool();
+        }
+    }
+
     public void ChangeBool()
     {
         if (colliderviewState.isOn)

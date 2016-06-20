@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 public abstract class AbstractFighter : MonoBehaviour {
     // Update is called every frame, if the MonoBehaviour is enabled
