@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityStandardAssets.ImageEffects;
-using UnityStandardAssets;
 
 public class ScreenCap : MonoBehaviour {
 
@@ -10,7 +9,7 @@ public class ScreenCap : MonoBehaviour {
 	void Start()
 	{
 		flash.SetActive(false);
-		GetComponent<GrayScale> ().enable = false;
+		GetComponent<Grayscale> ().enabled = false;
 	}
 	void Capture ()
 	{
