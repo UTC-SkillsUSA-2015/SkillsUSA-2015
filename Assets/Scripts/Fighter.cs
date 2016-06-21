@@ -102,7 +102,7 @@ public class Fighter : AbstractFighter {
     int stunTimer;
     int m_health;
 
-    bool m_softStun = true;
+    bool m_softStun = false;
     bool hitFlag;
     bool jumpFlag;
     SoundGroup contactSounds;
@@ -179,6 +179,7 @@ public class Fighter : AbstractFighter {
     }
 
     protected override void UpdateMovement () {
+        Debug.Log (gameObject.name + " " + (CanMove ? "can" : "cannot") + " move");
         if (CanMove) {
             movementInput = m_inputs.HorizontalInput;
             verticalInput = m_inputs.VerticalInput;
@@ -187,6 +188,14 @@ public class Fighter : AbstractFighter {
             if (m_engine.Grounded && jumpFlag) {
                 m_engine.Jump (jumpForce);
             }
+        }
+        else {
+            var str = gameObject.name + " cannot move because";
+            str += (SoftStun ? " they are soft stunned" : "");
+            str += (SoftStun && HardStun ? " and" : "");
+            str += (HardStun ? " they are hard stunned" : "");
+            str += ".";
+            Debug.Log (str);
         }
     }
 
