@@ -14,6 +14,9 @@ public class PauseGame : MonoBehaviour {
     [SerializeField]
     Fighter[] fighters;
 
+	[HideInInspector]
+	public bool gameOver = false;
+
     void Start()
     {
         pauseMenu.SetActive(false);
@@ -30,10 +33,12 @@ public class PauseGame : MonoBehaviour {
             }
             else
             {
-                Time.timeScale = 1;
+				if (!gameOver) {
+					Time.timeScale = 1;
+				}
             }
 
-            if (Input.GetButtonDown("StartButton"))
+			if (Input.GetButtonDown("StartButton") && !gameOver)
             {
                 paused = !paused;
             }

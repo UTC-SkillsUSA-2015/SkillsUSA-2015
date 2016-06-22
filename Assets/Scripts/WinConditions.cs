@@ -55,6 +55,9 @@ public class WinConditions : MonoBehaviour {
     public bool started { get; private set; }
     public bool ended { get; private set; }
 
+	[SerializeField]
+	PauseGame pause;
+
 	void Start () {
         fight.SetActive(false);
         P1Ready.SetActive(false);
@@ -129,11 +132,12 @@ public class WinConditions : MonoBehaviour {
     }
 
     void DisplayWinner()
-    {
+	{
+		pause.gameOver = true;	
+		Time.timeScale = 0;
         ended = true;
         winTexts[winText].SetActive(true);
         endCanvas.SetActive(true);
-        Time.timeScale = 0;
     }
 
     IEnumerator Hide()
