@@ -15,5 +15,9 @@ public class FightManager : MonoBehaviour {
             if (winning.ended)
                 winning.restart ();
         }
+		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("StartButton")) {
+			if (winning.ended)
+				winning.quit ();
+		}
 	}
 }

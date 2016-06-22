@@ -191,4 +191,9 @@ public class WinConditions : MonoBehaviour {
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+	public void quit()
+	{
+		SceneManager.LoadScene("MainMenu2.0");
+	}
 }
