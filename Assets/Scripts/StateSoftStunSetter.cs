@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 public class StateSoftStunSetter : StateMachineBehaviour {
     public static string[] activeTags = { "Idle", "Move" };
